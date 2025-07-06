@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Roaming Borders</string>
+    <string-array name="countries">
+        <item>AFG - Afghanistan</item>
+        <!-- … alle ISO‑3166 ergänzen → siehe Android Länderliste Vorlage -->
+    </string-array>
+    <string name="add">Hinzufügen</string>
+    <string name="save_list">Liste speichern</string>
+    <string name="activate">Aktivieren</string>
+    <string name="delete">Löschen</string>
+    <string name="mode_blacklist">Blacklist</string>
+    <string name="mode_whitelist">Whitelist</string>
+    <string name="whitelist_blacklist">Whitelist / Blacklist</string>
+</resources>

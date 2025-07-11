@@ -6,15 +6,15 @@ import java.util.Locale;
 import java.util.Set;
 
 public class ListConfig {
-    public final Set<String> iso3;
+    public final Set<String> iso2;
     public final boolean whitelist;
 
-    public ListConfig(Set<String> iso3, boolean whitelist) {
-        this.iso3 = iso3; this.whitelist = whitelist;
+    public ListConfig(Set<String> iso2, boolean whitelist) {
+        this.iso2 = iso2; this.whitelist = whitelist;
     }
 
     public boolean isBlocked(String currentIso) {
-        boolean contained = iso3.contains(currentIso.toUpperCase(Locale.US));
+        boolean contained = iso2.contains(currentIso.toUpperCase(Locale.US));
         return whitelist ? !contained : contained;
     }
 

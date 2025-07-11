@@ -23,7 +23,7 @@ public class NotificationHelper {
         return new NotificationCompat.Builder(ctx, CHANNEL_MON)
                 //.setSmallIcon(R.drawable.ic_cell_tower) // TODO
                 .setContentTitle(ctx.getString(R.string.app_name))
-                .setContentText("Roaming-Überwachung aktiv …")
+                .setContentText("Roaming-Überwachung aktiv ...")
                 .setOngoing(true)
                 .build();
     }

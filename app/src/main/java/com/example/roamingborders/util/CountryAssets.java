@@ -2,23 +2,48 @@ package com.example.roamingborders.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CountryAssets {
 
-    /** Liefert z. B. “DEU – Germany” oder “DEU – Deutschland” */
+    public static final String[] COUNTRIES = Locale.getISOCountries();
+
     public static List<String> getDisplayList() {
         List<String> out = new ArrayList<>();
-        for (String iso2 : Locale.getISOCountries()) {
-            Locale loc = new Locale("", iso2);
-            // ISO-3-Code ermitteln
-            String iso3 = loc.getISO3Country().toUpperCase(Locale.US);
-            // Zeilen für Spinner zusammenstellen
-            out.add(iso3 + " – " + loc.getDisplayCountry(Locale.getDefault()));
+
+        for (String country : COUNTRIES) {
+            out.add(getDisplayTextForCountry(country));
         }
-        // alphabetisch sortieren
-        Collections.sort(out);
+
+        //Collections.sort(out);
         return out;
+    }
+
+    public static String getDisplayTextForCountry(String country) {
+        if(country.length() != 2) {
+            return null;
+        }
+
+        Locale loc = new Locale("", country);
+        String iso = loc.getISO3Country().toUpperCase(Locale.US);
+        String flag = getFlagEmoji(country);
+        String name = loc.getDisplayCountry(Locale.getDefault());
+
+        return iso + " " + flag + " – " + name;
+    }
+
+    public static String getFlagEmoji(String country) {
+        if (country == null || country.length() != 2) {
+            // Return the pirate flag emoji as fallback.
+            return "\uD83C\uDFF4\u200D\uFE0F";
+        }
+        int base = 0x1F1E6;          // Unicode-Offset for 'A'
+        int first = base + (country.charAt(0) - 'A');
+        int second = base + (country.charAt(1) - 'A');
+        return new String(Character.toChars(first)) +
+                new String(Character.toChars(second));
     }
 }

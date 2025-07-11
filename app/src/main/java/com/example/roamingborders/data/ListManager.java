@@ -22,9 +22,9 @@ public class ListManager {
 
     public ListManager(Context ctx) { sp = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE); }
 
-    public void saveList(String name, Set<String> iso3, boolean whitelist) {
+    public void saveList(String name, Set<String> country, boolean whitelist) {
         JsonObject obj = new JsonObject();
-        obj.add("entries", new Gson().toJsonTree(iso3));
+        obj.add("entries", new Gson().toJsonTree(country));
         obj.addProperty("whitelist", whitelist);
         sp.edit().putString(name, obj.toString()).apply();
     }
@@ -33,14 +33,11 @@ public class ListManager {
 
     public List<String> getAllListNames() {
         List<String> names = new ArrayList<>(sp.getAll().keySet());
-        names.add(0, "EWR‑Whitelist");
+        names.addAll(0, PresetLists.getPresets().keySet());
         return names;
     }
 
     public ListConfig loadList(String name) {
-        if ("EWR‑Whitelist".equals(name)) {
-            return PresetLists.getEwrWhitelist();
-        }
         String json = sp.getString(name, null);
         JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
         Set<String> entries = new Gson().fromJson(obj.get("entries"), new TypeToken<Set<String>>(){}.getType());
@@ -54,6 +51,6 @@ public class ListManager {
 
     public ListConfig getActiveConfig() {
         String json = sp.getString(ACTIVE_KEY, null);
-        return json == null ? PresetLists.getEwrWhitelist() : ListConfig.fromJson(json);
+        return json == null ? PresetLists.getEwr() : ListConfig.fromJson(json);
     }
 }

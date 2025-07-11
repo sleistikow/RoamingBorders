@@ -4,11 +4,20 @@
         <item>AFG - Afghanistan</item>
         <!-- … alle ISO‑3166 ergänzen → siehe Android Länderliste Vorlage -->
     </string-array>
-    <string name="add">Hinzufügen</string>
-    <string name="save_list">Liste speichern</string>
-    <string name="activate">Aktivieren</string>
-    <string name="delete">Löschen</string>
+    <string name="add">Add</string>
+    <string name="save_list">Save List</string>
+    <string name="activate">Activate</string>
+    <string name="delete">Delete</string>
     <string name="mode_blacklist">Blacklist</string>
     <string name="mode_whitelist">Whitelist</string>
     <string name="whitelist_blacklist">Whitelist / Blacklist</string>
+    <string name="copy_preset">Copy preset</string>
+    <string name="delete_preset">Delete Preset</string>
+    <string name="new_preset">New Preset</string>
+    <string name="remove">Remove</string>
+    <string name="name_copy">List Name</string>
+    <string name="name_new">List Name</string>
+    <string name="activated">Configuration activated</string>
+    <string name="commit">Commit Changes</string>
+    <string name="discard">Discard Changes</string>
 </resources>

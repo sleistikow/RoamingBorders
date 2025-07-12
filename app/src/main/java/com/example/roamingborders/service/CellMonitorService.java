@@ -120,6 +120,10 @@ public class CellMonitorService extends Service {
             return;
         }
         ListConfig cfg = listManager.getActiveConfig();
+        if(cfg == null) {
+            Toast.makeText(this, "No active config", Toast.LENGTH_SHORT).show();
+            return;
+        }
         boolean blocked = cfg.isBlocked(iso);
         if (blocked) NullVpnService.ensureRunning(this);
         else NullVpnService.ensureStopped(this);

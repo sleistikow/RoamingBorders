@@ -3,6 +3,7 @@ package com.example.roamingborders.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.VpnService;
 
 import com.example.roamingborders.service.CellMonitorService;
 
@@ -11,23 +12,10 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (!Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) return;
 
-        CellMonitorService.ensureRunning(context);
-
-        /*
-        // Device-protected Storage, wenn vor Entsperren gestartet
-        Context prefCtx = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                ? ctx.createDeviceProtectedStorageContext()
-                : ctx;
-
-        boolean wanted = PreferenceManager
-                .getDefaultSharedPreferences(prefCtx)
-                .getBoolean("firewall_enabled", true);
-
-        if (wanted) {
-            ContextCompat.startForegroundService(
-                    ctx, new Intent(ctx, NullVPN.class));
+        // TODO: das sollte zentral passieren.
+        Intent prepareIntent = VpnService.prepare(context);
+        if (prepareIntent == null) {
+            CellMonitorService.ensureRunning(context);
         }
-
-         */
     }
 }

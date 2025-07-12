@@ -2,6 +2,7 @@ package com.example.roamingborders;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.VpnService;
@@ -28,11 +29,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.roamingborders.data.ListManager;
 import com.example.roamingborders.databinding.ActivityMainBinding;
 import com.example.roamingborders.model.ListConfig;
+import com.example.roamingborders.monitor.MobileTrafficMonitor;
 import com.example.roamingborders.preset.PresetLists;
 import com.example.roamingborders.service.CellMonitorService;
 import com.example.roamingborders.util.CountryAdapter;
 import com.example.roamingborders.util.CountryAssets;
+import com.example.roamingborders.util.MessageHelper;
 import com.example.roamingborders.util.TextInputDialog;
+import com.example.roamingborders.vpn.NullVpnService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -54,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     private final ArrayList<String> workingList = new ArrayList<>();
     private ListManager listManager;
+    private MobileTrafficMonitor monitor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent prepareIntent = VpnService.prepare(this);
         if (prepareIntent != null) {
+            //MessageHelper.showVpnInfo(this);
             vpnConsent.launch(prepareIntent);
         }
 
@@ -141,6 +148,17 @@ public class MainActivity extends AppCompatActivity {
             activateList();
         });
 
+        Context ctx = this;
+        monitor = new MobileTrafficMonitor(this, usingMobile -> {
+            if (usingMobile) {
+                //Toast.makeText(ctx, "Connected to Cell", Toast.LENGTH_SHORT).show();
+                //NullVpnService.ensureRunning(ctx);
+            } else {
+                //Toast.makeText(ctx, "Connected to WIFI", Toast.LENGTH_SHORT).show();
+                //NullVpnService.ensureStopped(ctx);
+            }
+        });
+
         /*
         btnDelete.setOnClickListener(v -> {
             listManager.deleteList(spnSaved.getSelectedItem().toString());
@@ -175,10 +193,17 @@ public class MainActivity extends AppCompatActivity {
         CellMonitorService.ensureRunning(this);
     }
 
+    @Override protected void onStart() { super.onStart(); monitor.start(); }
+    @Override protected void onStop()  { super.onStop();  monitor.stop();  }
+
     private void refreshPresetSpinner() {
+        // Retrieve saved lists and add presets.
+        List<String> names = listManager.getAllListNames();
+        names.addAll(PresetLists.getPresets().keySet());
+
         ArrayAdapter<String> a = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item,
-                listManager.getAllListNames());
+                names);
         spnPreset.setAdapter(a);
     }
 
@@ -210,7 +235,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void activateList() {
         String preset = spnPreset.getSelectedItem().toString();
-        listManager.setActiveConfig(listManager.loadList(preset));
+        if(PresetLists.getPresets().containsKey(preset)) {
+            listManager.setActiveConfig(PresetLists.getPresets().get(preset));
+        } else if(listManager.getAllListNames().contains(preset)) {
+            listManager.setActiveConfig(listManager.loadList(preset));
+        } else {
+            Toast.makeText(this, "List not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         CellMonitorService.ensureRunning(this);
         Toast.makeText(this, R.string.activated, Toast.LENGTH_SHORT).show();
     }
@@ -262,14 +295,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestRuntimePermissions() {
         List<String> req = new ArrayList<>();
+        /*
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
             req.add(Manifest.permission.READ_PHONE_STATE);
         }
+        */
+        /*
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             req.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
+
+         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                         != PackageManager.PERMISSION_GRANTED) {

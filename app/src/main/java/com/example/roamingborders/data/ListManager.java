@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.roamingborders.model.ListConfig;
-import com.example.roamingborders.preset.PresetLists;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -18,14 +17,17 @@ public class ListManager {
     private static final String PREFS = "lists";
     private static final String ACTIVE_KEY = "active";
 
+    private static final String PROPERTY_ENTRIES = "entries";
+    private static final String PROPERTY_WHITELIST = "whitelist";
+
     private final SharedPreferences sp;
 
     public ListManager(Context ctx) { sp = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE); }
 
     public void saveList(String name, Set<String> country, boolean whitelist) {
         JsonObject obj = new JsonObject();
-        obj.add("entries", new Gson().toJsonTree(country));
-        obj.addProperty("whitelist", whitelist);
+        obj.add(PROPERTY_ENTRIES, new Gson().toJsonTree(country));
+        obj.addProperty(PROPERTY_WHITELIST, whitelist);
         sp.edit().putString(name, obj.toString()).apply();
     }
 
@@ -33,15 +35,15 @@ public class ListManager {
 
     public List<String> getAllListNames() {
         List<String> names = new ArrayList<>(sp.getAll().keySet());
-        names.addAll(0, PresetLists.getPresets().keySet());
+        names.remove(ACTIVE_KEY);
         return names;
     }
 
     public ListConfig loadList(String name) {
         String json = sp.getString(name, null);
         JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
-        Set<String> entries = new Gson().fromJson(obj.get("entries"), new TypeToken<Set<String>>(){}.getType());
-        boolean whitelist = obj.get("whitelist").getAsBoolean();
+        Set<String> entries = new Gson().fromJson(obj.get(PROPERTY_ENTRIES), new TypeToken<Set<String>>(){}.getType());
+        boolean whitelist = obj.get(PROPERTY_WHITELIST).getAsBoolean();
         return new ListConfig(entries, whitelist);
     }
 
@@ -51,6 +53,6 @@ public class ListManager {
 
     public ListConfig getActiveConfig() {
         String json = sp.getString(ACTIVE_KEY, null);
-        return json == null ? PresetLists.getEwr() : ListConfig.fromJson(json);
+        return json == null ? null : ListConfig.fromJson(json);
     }
 }

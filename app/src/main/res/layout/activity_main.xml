@@ -24,7 +24,7 @@
         <ImageButton
             android:id="@+id/btnCopyPreset"
             android:src="@drawable/baseline_content_copy_24"
-            android:contentDescription="@string/copy_preset"
+            android:contentDescription="@string/preset_copy"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -33,7 +33,7 @@
         <ImageButton
             android:id="@+id/btnDeletePreset"
             android:src="@drawable/baseline_delete_outline_24"
-            android:contentDescription="@string/delete_preset"
+            android:contentDescription="@string/preset_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -42,7 +42,7 @@
         <ImageButton
             android:id="@+id/btnNewPreset"
             android:src="@drawable/baseline_add_24"
-            android:contentDescription="@string/new_preset"
+            android:contentDescription="@string/preset_new"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -52,7 +52,8 @@
         android:id="@+id/recyclerCountries"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@drawable/recycler_border" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,7 +75,7 @@
             android:id="@+id/btnAddRemove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add" />
+            android:text="@string/country_add" />
     </LinearLayout>
 
     <CheckBox
@@ -97,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/commit" />
+            android:text="@string/changes_commit" />
 
         <!-- Dynamically shows “Add” or “Remove” -->
         <Button
@@ -105,13 +106,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/discard" />
+            android:text="@string/changes_discard" />
     </LinearLayout>
 
     <Button
         android:id="@+id/btnEnableDisable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/activate"
+        android:text="@string/preset_activate"
         android:layout_marginTop="8dp"/>
 </LinearLayout>

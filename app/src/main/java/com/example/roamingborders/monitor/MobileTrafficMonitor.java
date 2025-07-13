@@ -8,11 +8,6 @@ import android.net.NetworkRequest;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
 
-/**
- * Meldet, ob der *aktuelle* Default-Datenpfad Mobilfunk nutzt.
- * Übergibt true  ⇒ Traffic geht über MOBILE
- *           false ⇒ Traffic geht NICHT über MOBILE (val. WLAN oder gar kein Netz)
- */
 public class MobileTrafficMonitor {
 
     public interface Callback {
@@ -28,14 +23,12 @@ public class MobileTrafficMonitor {
         this.cb = cb;
     }
 
-    /** Registrierung – am besten in onStart() / onResume() */
     public void start() {
-        if (nc != null) return;                     // schon aktiv
+        if (nc != null) return;
 
         nc = new ConnectivityManager.NetworkCallback() {
 
             private void handle(Network net, NetworkCapabilities caps) {
-                // Wir interessieren uns NUR für das aktuelle Default-Netz
                 if (!net.equals(cm.getActiveNetwork())) return;
 
                 boolean validated = caps != null
@@ -53,7 +46,6 @@ public class MobileTrafficMonitor {
 
             @Override
             public void onLost(Network net) {
-                // kein Default-Netz mehr → sicherheitshalber „MOBILE=true?“
                 if (net.equals(cm.getActiveNetwork())) {
                     cb.onMobileStateChanged(true);
                 }
@@ -61,22 +53,20 @@ public class MobileTrafficMonitor {
         };
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {          // API 24+
-            cm.registerDefaultNetworkCallback(nc);                     // 1-Zeiler
+            cm.registerDefaultNetworkCallback(nc);
         } else {
-            // Fallback für API 23: alle Internet-Netze beobachten
+            // Fallback for API 23: observe all internet connections
             NetworkRequest req = new NetworkRequest.Builder()
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                     .build();
             cm.registerNetworkCallback(req, nc);
         }
 
-        // Initialzustand melden
         Network net = cm.getActiveNetwork();
         NetworkCapabilities caps = cm.getNetworkCapabilities(net);
         nc.onCapabilitiesChanged(net, caps);
     }
 
-    /** Abmeldung – z. B. in onStop() / onPause() */
     public void stop() {
         if (nc != null) {
             cm.unregisterNetworkCallback(nc);

@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class NullVpnService extends VpnService {
     private static final int NOTIF_ID = 2002;
-    private static final String ACTION_STOP = "STOP_VPN";
+    public static final String ACTION_STOP = "STOP_VPN";
     private ParcelFileDescriptor tun;
     private static NullVpnService instance;
 

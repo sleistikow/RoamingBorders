@@ -12,7 +12,7 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (!Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) return;
 
-        // TODO: das sollte zentral passieren.
+        // At this point we assume that
         Intent prepareIntent = VpnService.prepare(context);
         if (prepareIntent == null) {
             CellMonitorService.ensureRunning(context);

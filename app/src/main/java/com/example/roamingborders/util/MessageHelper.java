@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import com.example.roamingborders.R;
+
 public class MessageHelper {
     public static void showVpnInfo(Context ctx, DialogInterface.OnClickListener listener) {
         new AlertDialog.Builder(ctx)
-                .setTitle("Disclaimer")
-                .setMessage("This app uses a VPN to block data traffic. This needs to be granted in the following dialog.")
-                .setPositiveButton("OK", listener)
+                .setTitle(R.string.disclaimer_vpn_title)
+                .setMessage(R.string.disclaimer_vpn_text)
+                .setPositiveButton(R.string.dialog_ok, listener)
                 .setCancelable(false)
                 .show();
     }

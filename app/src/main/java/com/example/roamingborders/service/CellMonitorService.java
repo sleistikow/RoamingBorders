@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.example.roamingborders.R;
 import com.example.roamingborders.data.ListManager;
 import com.example.roamingborders.model.ListConfig;
 import com.example.roamingborders.util.NotificationHelper;
@@ -113,7 +114,6 @@ public class CellMonitorService extends Service {
 
     private void evaluate() {
         String iso = tm.getNetworkCountryIso().toUpperCase(Locale.US);
-        //Toast.makeText(this, "Connected to: " + iso, Toast.LENGTH_SHORT).show();
         if(iso.isEmpty()) {
             // E.g. flight mode.
             NullVpnService.ensureStopped(this);
@@ -121,7 +121,7 @@ public class CellMonitorService extends Service {
         }
         ListConfig cfg = listManager.getActiveConfig();
         if(cfg == null) {
-            Toast.makeText(this, "No active config", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_no_active_preset, Toast.LENGTH_SHORT).show();
             return;
         }
         boolean blocked = cfg.isBlocked(iso);

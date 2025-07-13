@@ -1,23 +1,43 @@
 <resources>
     <string name="app_name">Roaming Borders</string>
-    <string-array name="countries">
-        <item>AFG - Afghanistan</item>
-        <!-- … alle ISO‑3166 ergänzen → siehe Android Länderliste Vorlage -->
-    </string-array>
-    <string name="add">Add</string>
-    <string name="save_list">Save List</string>
-    <string name="activate">Activate</string>
-    <string name="delete">Delete</string>
+
     <string name="mode_blacklist">Blacklist</string>
     <string name="mode_whitelist">Whitelist</string>
-    <string name="whitelist_blacklist">Whitelist / Blacklist</string>
-    <string name="copy_preset">Copy preset</string>
-    <string name="delete_preset">Delete Preset</string>
-    <string name="new_preset">New Preset</string>
-    <string name="remove">Remove</string>
-    <string name="name_copy">List Name</string>
-    <string name="name_new">List Name</string>
-    <string name="activated">Configuration activated</string>
-    <string name="commit">Commit Changes</string>
-    <string name="discard">Discard Changes</string>
+
+    <string name="preset_activate">Activate</string>
+    <string name="preset_init">My Preset</string>
+    <string name="preset_copy">Copy preset</string>
+    <string name="preset_delete">Delete preset</string>
+    <string name="preset_new">New preset</string>
+
+    <string name="name_copy">Preset name</string>
+    <string name="name_new">Preset name</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <string name="country_add">Add</string>
+    <string name="country_remove">Remove</string>
+    <string name="changes_commit">Commit Changes</string>
+    <string name="changes_discard">Discard Changes</string>
+
+    <string name="preset_eea">European Economics Area</string>
+    <string name="preset_eu">European Union</string>
+    <string name="preset_na">North America</string>
+
+    <string name="toast_preset_activated">Preset active</string>
+    <string name="toast_no_active_preset">No active config</string>
+    <string name="toast_no_country_selected">No country selected</string>
+    <string name="toast_changes_saved">Changes saved</string>
+    <string name="toast_changes_discarded">Changes discarded</string>
+    <string name="toast_error_list_not_found">List not found</string>
+
+    <string name="notification_monitoring_title">@string/app_name</string>
+    <string name="notification_monitoring_text">is monitoring signal…</string>
+
+    <string name="notification_vpn_title">Blocking active</string>
+    <string name="notification_vpn_text">Mobile data is being blocked</string>
+    <string name="notification_vpn_action_stop">Stop</string>
+
+    <string name="disclaimer_vpn_title">Disclaimer</string>
+    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) routing all network request into the void to block all data traffic. The following system dialogue asks for permission to set up the VPN network.</string>
 </resources>

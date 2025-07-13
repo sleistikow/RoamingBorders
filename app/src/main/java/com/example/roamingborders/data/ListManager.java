@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class ListManager {
     private static final String PREFS = "lists";
-    private static final String ACTIVE_KEY = "active";
+    private static final String ACTIVE_KEY = "#?!active_list#?!";
 
     private static final String PROPERTY_ENTRIES = "entries";
     private static final String PROPERTY_WHITELIST = "whitelist";

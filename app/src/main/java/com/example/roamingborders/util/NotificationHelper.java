@@ -15,45 +15,70 @@ import com.example.roamingborders.vpn.NullVpnService;
 
 public class NotificationHelper {
 
-    private static final String CHANNEL_VPN = "vpn";
-    private static final String CHANNEL_MON = "monitor";
+    private static final String CH_VPN = "vpn";
+    private static final String CH_MON = "monitor";
+    private static final String GROUP_FG  = "roaming_foreground";
 
-    public static Notification buildPersistent(Context ctx) {
+    public static Notification buildVpn(Context ctx) {
+
         createChannels(ctx);
-        return new NotificationCompat.Builder(ctx, CHANNEL_MON)
-                //.setSmallIcon(R.drawable.ic_cell_tower) // TODO
-                .setContentTitle(ctx.getString(R.string.app_name))
-                .setContentText("Roaming-Überwachung aktiv ...")
-                .setOngoing(true)
+
+        PendingIntent stop = PendingIntent.getService(
+                ctx, 0,
+                new Intent(ctx, NullVpnService.class)
+                        .setAction(NullVpnService.ACTION_STOP),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        return new NotificationCompat.Builder(ctx, CH_VPN)
+                .setSmallIcon(R.drawable.outline_cell_tower_24)
+                .setContentTitle(ctx.getString(R.string.notification_vpn_title))
+                .setContentText(ctx.getString(R.string.notification_vpn_text))
+                .setOngoing(false)
+                .setGroup(GROUP_FG)
+                .setSortKey("A")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)  // API <= 25
+                .addAction(R.drawable.stop_button,
+                        ctx.getString(R.string.notification_vpn_action_stop),
+                        stop)
                 .build();
     }
 
-    public static Notification buildVpn(Context ctx) {
+    public static Notification buildPersistent(Context ctx) {
         createChannels(ctx);
-        PendingIntent stop = PendingIntent.getService(ctx, 0,
-                new Intent(ctx, NullVpnService.class).setAction("stop"),
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-        return new NotificationCompat.Builder(ctx, CHANNEL_VPN)
-                //.setSmallIcon(R.drawable.ic_vpn_lock) // TODO
-                .setContentTitle("NullVPN aktiv")
-                .setContentText("Tippen zum Stoppen")
-                .setContentIntent(stop)
+        return new NotificationCompat.Builder(ctx, CH_MON)
+                .setSmallIcon(R.drawable.running_service_icon)
+                .setContentTitle(ctx.getString(R.string.notification_monitoring_title))
+                .setContentText(ctx.getString(R.string.notification_monitoring_text))
                 .setOngoing(true)
+                .setGroup(GROUP_FG)
+                .setSortKey("B")
+                .setPriority(NotificationCompat.PRIORITY_MIN) // API <= 25
                 .build();
     }
 
     private static void createChannels(Context ctx) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager nm = ctx.getSystemService(NotificationManager.class);
-            if (nm.getNotificationChannel(CHANNEL_VPN) == null) {
-                nm.createNotificationChannel(new NotificationChannel(CHANNEL_VPN, "VPN",
-                        NotificationManager.IMPORTANCE_LOW));
+
+            if (nm.getNotificationChannel(CH_VPN) == null) {
+                NotificationChannel vpn = new NotificationChannel(
+                        CH_VPN, "VPN",
+                        NotificationManager.IMPORTANCE_HIGH);
+                vpn.setShowBadge(false);
+                vpn.setSound(null, null);
+                vpn.enableVibration(false);
+                nm.createNotificationChannel(vpn);
             }
-            if (nm.getNotificationChannel(CHANNEL_MON) == null) {
-                nm.createNotificationChannel(new NotificationChannel(CHANNEL_MON, "Monitoring",
-                        NotificationManager.IMPORTANCE_MIN));
+            if (nm.getNotificationChannel(CH_MON) == null) {
+                NotificationChannel mon = new NotificationChannel(
+                        CH_MON, "Monitoring",
+                        NotificationManager.IMPORTANCE_MIN);
+                mon.setShowBadge(false);
+                mon.setSound(null, null);
+                mon.enableVibration(false);
+                nm.createNotificationChannel(mon);
             }
         }
     }
+
 }

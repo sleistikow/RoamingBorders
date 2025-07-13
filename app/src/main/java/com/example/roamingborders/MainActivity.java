@@ -38,6 +38,8 @@ import com.example.roamingborders.util.CountryAssets;
 import com.example.roamingborders.util.MessageHelper;
 import com.example.roamingborders.util.TextInputDialog;
 import com.example.roamingborders.vpn.NullVpnService;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -61,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private final ArrayList<String> workingList = new ArrayList<>();
     private ListManager listManager;
     private MobileTrafficMonitor monitor;
+
+    private static final String PREFS  = "app_prefs";
+    private static final String KEY_TUTORIAL_SHOWN = "tutorial_shown";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
         refreshAddRemoveLabel();
         requestRuntimePermissions();
         CellMonitorService.ensureRunning(this);
+
+        if (isFirstRun()) {
+            getWindow().getDecorView().post(this::showTour);
+        }
     }
 
     @Override protected void onStart() { super.onStart(); monitor.start(); }
@@ -318,4 +327,59 @@ public class MainActivity extends AppCompatActivity {
             MessageHelper.showVpnInfo(this, (d, i) -> vpnConsent.launch(prepareIntent));
         }
     }
+
+    private boolean isFirstRun() {
+        return !getSharedPreferences(PREFS, MODE_PRIVATE)
+                .getBoolean(KEY_TUTORIAL_SHOWN, false);
+    }
+
+    private void setTutorialShown() {
+        getSharedPreferences(PREFS, MODE_PRIVATE)
+                .edit().putBoolean(KEY_TUTORIAL_SHOWN, true).apply();
+    }
+
+    private void showTour() {
+        TapTargetSequence sequence = new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.spnPreset),
+                                        "Presets",
+                                        "Select a predefined or custom preset here"),
+                        TapTarget.forView(findViewById(R.id.btnCopyPreset),
+                                        "Presets",
+                                        "You can copy.."),
+                        TapTarget.forView(findViewById(R.id.btnDeletePreset),
+                                        "Presets",
+                                        "..or delete the current preset"),
+                        TapTarget.forView(findViewById(R.id.btnNewPreset),
+                                        "Presets",
+                                        "And create a new one."),
+                        TapTarget.forView(findViewById(R.id.actCountry),
+                                        "Search for a country here",
+                                        "Tap and/or type here to search for a country"),
+                        TapTarget.forView(findViewById(R.id.btnAddRemove),
+                                        "Countries",
+                                        "Add or remove it here")
+                                .id(1),
+                        TapTarget.forView(findViewById(R.id.recyclerCountries),
+                                        "Countries",
+                                        "See your current preset"),
+                        TapTarget.forView(findViewById(R.id.btnCommitChanges),
+                                "Countries",
+                                "You can commit your changes to the current preset"),
+                        TapTarget.forView(findViewById(R.id.btnDiscardChanges),
+                                "Countries",
+                                "Or discard all changes whatsoever"),
+                        TapTarget.forView(findViewById(R.id.btnEnableDisable),
+                                "Activate",
+                                "Finally, activate the preset and enjoy roaming borders!")
+                )
+                .listener(new TapTargetSequence.Listener() {
+                    @Override public void onSequenceFinish() { setTutorialShown(); }
+                    @Override public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {}
+                    @Override public void onSequenceCanceled(TapTarget lastTarget) { setTutorialShown(); }
+                });
+
+        sequence.start();
+    }
+
 }

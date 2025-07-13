@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.taptargetview)
     implementation(libs.gson)
     implementation(libs.appcompat.v170)
     implementation(libs.material)

@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     private ListManager listManager;
     private MobileTrafficMonitor monitor;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,11 +152,9 @@ public class MainActivity extends AppCompatActivity {
         Context ctx = this;
         monitor = new MobileTrafficMonitor(this, usingMobile -> {
             if (usingMobile) {
-                //Toast.makeText(ctx, "Connected to Cell", Toast.LENGTH_SHORT).show();
-                //CellMonitorService.ensureRunning(ctx);
+                CellMonitorService.ensureRunning(ctx);
             } else {
-                //Toast.makeText(ctx, "Connected to WIFI", Toast.LENGTH_SHORT).show();
-                //NullVpnService.ensureStopped(ctx);
+                NullVpnService.ensureStopped(ctx);
             }
         });
 

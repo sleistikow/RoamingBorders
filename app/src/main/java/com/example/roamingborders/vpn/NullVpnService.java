@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.roamingborders.service.CellMonitorService;
 import com.example.roamingborders.util.NotificationHelper;
 
 import java.io.FileInputStream;
@@ -58,10 +59,10 @@ public class NullVpnService extends VpnService {
 
             if (tun == null) establishVpn();
         } catch (Exception se) {
-            // Kann passieren, wenn POST_NOTIFICATIONS‑Runtime‑Permission (Android 13+) fehlt
-            Log.e("NullVpnService", "startForeground failed", se);
+            //Log.e("NullVpnService", "startForeground failed", se);
             stopSelf();
         }
+
         return START_STICKY;
     }
 
@@ -87,7 +88,7 @@ public class NullVpnService extends VpnService {
                 tun = null;
             }
         } catch (IOException e) {
-            Log.e("VPN", "Closing tun failed", e);
+            //Log.e("VPN", "Closing tun failed", e);
         }
         stopForeground(true);
         stopSelf();
@@ -101,8 +102,8 @@ public class NullVpnService extends VpnService {
     }
 
     @Override
-    public void onRevoke() {   // anderes VPN hat übernommen
-        // TODO: hier muss die Activity informiert werden und der Toggle deaktiviert werden
-        stopSelf();
+    public void onRevoke() {   // foreign VPN took over
+        // TODO: hier muss ggf. die Activity informiert werden und der Toggle deaktiviert werden
+        stopVpn();
     }
 }

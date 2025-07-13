@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
+import android.net.VpnService;
 import android.os.Build;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
@@ -26,6 +27,7 @@ import java.util.Locale;
 
 public class CellMonitorService extends Service {
     private static final int NOTIF_ID = 2001;
+    private static final String ACTION_STOP = "STOP_MONITORING";
     private TelephonyManager tm;
     private ListManager listManager;
 
@@ -42,6 +44,14 @@ public class CellMonitorService extends Service {
             instance.evaluate();
         }
     }
+
+    public static void ensureStopped(Context ctx) {
+        if(instance != null) {
+            Intent intent = new Intent(ctx, CellMonitorService.class).setAction(ACTION_STOP);
+            ContextCompat.startForegroundService(ctx, intent);
+        }
+    }
+
 
     @Override
     public void onCreate() {
@@ -67,6 +77,12 @@ public class CellMonitorService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && ACTION_STOP.equals(intent.getAction())) {
+            stopForeground(true);
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 // API 34+: 3‑arg overload verlangt expliziten Typ → SERVICE_TYPE_DATA_SYNC
@@ -78,7 +94,7 @@ public class CellMonitorService extends Service {
                 startForeground(NOTIF_ID, NotificationHelper.buildPersistent(this));
             }
         } catch (SecurityException se) {
-            Log.e("CellMonitorService", "startForeground failed", se);
+            //Log.e("CellMonitorService", "startForeground failed", se);
             stopSelf();
             return START_NOT_STICKY;
         }

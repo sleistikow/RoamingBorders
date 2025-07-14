@@ -23,24 +23,33 @@ public class NotificationHelper {
 
         createChannels(ctx);
 
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, CH_VPN)
+                .setSmallIcon(R.drawable.outline_cell_tower_24)
+                .setContentTitle(ctx.getString(R.string.notification_vpn_title))
+                .setContentText(ctx.getString(R.string.notification_vpn_text))
+                .setOngoing(true)
+                .setGroup(GROUP_FG)
+                .setSortKey("A")
+                .setPriority(NotificationCompat.PRIORITY_HIGH);  // API <= 25
+
+        /*
+
+        // We could add a stop action here, however, the user could accidentally press stop and risk
+        // roaming fees and secondly, the main activity would also need to be informed that VPN
+        // function received an override.
         PendingIntent stop = PendingIntent.getService(
                 ctx, 0,
                 new Intent(ctx, NullVpnService.class)
                         .setAction(NullVpnService.ACTION_STOP),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        return new NotificationCompat.Builder(ctx, CH_VPN)
-                .setSmallIcon(R.drawable.outline_cell_tower_24)
-                .setContentTitle(ctx.getString(R.string.notification_vpn_title))
-                .setContentText(ctx.getString(R.string.notification_vpn_text))
-                .setOngoing(false)
-                .setGroup(GROUP_FG)
-                .setSortKey("A")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)  // API <= 25
-                .addAction(R.drawable.stop_button,
-                        ctx.getString(R.string.notification_vpn_action_stop),
-                        stop)
-                .build();
+        builder.addAction(R.drawable.stop_button,
+                ctx.getString(R.string.notification_vpn_action_stop),
+                stop);
+
+         */
+
+        return builder.build();
     }
 
     public static Notification buildPersistent(Context ctx) {

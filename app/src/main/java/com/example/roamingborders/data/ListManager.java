@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class ListManager {
     private static final String PREFS = "lists";
-    private static final String ACTIVE_KEY = "#?!active_list#?!";
+    private static final String KEY_ACTIVE = "#?!active_list#?!";
 
     private static final String PROPERTY_ENTRIES = "entries";
     private static final String PROPERTY_WHITELIST = "whitelist";
@@ -35,7 +35,7 @@ public class ListManager {
 
     public List<String> getAllListNames() {
         List<String> names = new ArrayList<>(sp.getAll().keySet());
-        names.remove(ACTIVE_KEY);
+        names.remove(KEY_ACTIVE);
         return names;
     }
 
@@ -47,12 +47,20 @@ public class ListManager {
         return new ListConfig(entries, whitelist);
     }
 
-    public void setActiveConfig(ListConfig cfg) {
-        sp.edit().putString(ACTIVE_KEY, cfg.toJson()).apply();
+    public void setActiveConfig(String name) {
+        sp.edit().putString(KEY_ACTIVE, name).apply();
     }
 
-    public ListConfig getActiveConfig() {
-        String json = sp.getString(ACTIVE_KEY, null);
-        return json == null ? null : ListConfig.fromJson(json);
+    public String getActiveConfig() {
+        return sp.getString(KEY_ACTIVE, null);
+    }
+
+    public ListConfig loadActiveConfig() {
+        String activeConfigName = getActiveConfig();
+        if(activeConfigName != null) {
+            return loadList(activeConfigName);
+        }
+
+        return null;
     }
 }

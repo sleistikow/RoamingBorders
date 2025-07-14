@@ -78,6 +78,8 @@ public class CellMonitorService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && ACTION_STOP.equals(intent.getAction())) {
+            // Stop the VPN service in case it's still running.
+            NullVpnService.ensureStopped(this);
             stopForeground(true);
             stopSelf();
             return START_NOT_STICKY;
@@ -131,15 +133,17 @@ public class CellMonitorService extends Service {
     private void evaluate() {
         String iso = tm.getNetworkCountryIso().toUpperCase(Locale.US);
         if(iso.isEmpty()) {
-            // E.g. flight mode.
+            // This should not happen since the MobileTrafficMonitor should have killed
+            // the service.
+            return;
+        }
+
+        ListConfig cfg = listManager.loadActiveConfig();
+        if(cfg == null) {
             NullVpnService.ensureStopped(this);
             return;
         }
-        ListConfig cfg = listManager.getActiveConfig();
-        if(cfg == null) {
-            Toast.makeText(this, R.string.toast_no_active_preset, Toast.LENGTH_SHORT).show();
-            return;
-        }
+
         boolean blocked = cfg.isBlocked(iso);
         if (blocked) NullVpnService.ensureRunning(this);
         else NullVpnService.ensureStopped(this);

@@ -5,10 +5,13 @@ import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -32,10 +35,24 @@ public class TextInputDialog {
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         layout.addView(input);
 
-        CheckBox checkBox = new CheckBox(ctx);
-        checkBox.setText("Whitelist");
-        checkBox.setChecked(true);
-        layout.addView(checkBox);
+        RadioButton whitelistButton = new RadioButton(ctx);
+        whitelistButton.setText(ctx.getString(R.string.mode_whitelist));
+        whitelistButton.setId(ViewGroup.generateViewId());
+        RadioButton blacklistButton = new RadioButton(ctx);
+        blacklistButton.setText(ctx.getString(R.string.mode_blacklist));
+        blacklistButton.setId(ViewGroup.generateViewId());
+
+        RadioGroup radioGroup = new RadioGroup(ctx);
+        radioGroup.setOrientation(LinearLayout.HORIZONTAL);
+        radioGroup.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        radioGroup.addView(whitelistButton);
+        radioGroup.addView(blacklistButton);
+        radioGroup.check(whitelistButton.getId());
+
+        layout.addView(radioGroup);
 
         AlertDialog dlg = new MaterialAlertDialogBuilder(ctx)
                 .setTitle(title)
@@ -71,10 +88,9 @@ public class TextInputDialog {
             };
             input.addTextChangedListener(watcher);
 
-            // ② Erst *jetzt* den tatsächlichen OnClick registrieren
             ok.setOnClickListener(v -> {
                 String txt = input.getText().toString().trim();
-                boolean checked = checkBox.isChecked();
+                boolean checked = whitelistButton.isChecked();
                 listener.accept(txt, checked);
                 dlg.dismiss();
             });

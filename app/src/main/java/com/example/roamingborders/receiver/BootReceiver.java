@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.VpnService;
 
+import com.example.roamingborders.MainActivity;
 import com.example.roamingborders.service.CellMonitorService;
 
 public class BootReceiver extends BroadcastReceiver {
@@ -14,7 +15,7 @@ public class BootReceiver extends BroadcastReceiver {
 
         // At this point we assume that
         Intent prepareIntent = VpnService.prepare(context);
-        if (prepareIntent == null) {
+        if (prepareIntent == null && !MainActivity.isKillSwitchActive(context)) {
             CellMonitorService.ensureRunning(context);
         }
     }

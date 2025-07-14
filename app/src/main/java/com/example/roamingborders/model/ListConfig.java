@@ -18,7 +18,6 @@ public class ListConfig {
         return whitelist ? !contained : contained;
     }
 
-    // --- JSON helpers (Gson) ---
     public String toJson() { return new Gson().toJson(this); }
     public static ListConfig fromJson(String j) { return new Gson().fromJson(j, ListConfig.class); }
 }

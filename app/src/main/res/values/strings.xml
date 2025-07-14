@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">Roaming Borders</string>
+    <string name="app_info">Info</string>
+    <string name="app_run">Kill Switch - Stops the app</string>
 
     <string name="mode_blacklist">Blacklist</string>
     <string name="mode_whitelist">Whitelist</string>
 
-    <string name="preset_activate">Activate</string>
+    <string name="preset_active">Active</string>
     <string name="preset_init">My Preset</string>
     <string name="preset_copy">Copy preset</string>
     <string name="preset_delete">Delete preset</string>
@@ -14,10 +16,23 @@
     <string name="name_new">Preset name</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
 
+    <string name="message_preset_deletion_title">Confirm</string>
+    <string name="message_preset_deletion_text">Do you want to delete the current preset?</string>
+    <string name="message_predefined_preset_deletion_impossible_title">Confirm</string>
+    <string name="message_predefined_preset_deletion_impossible_text">Deleting a predefined preset is not possible.</string>
+    <string name="message_active_preset_deletion_impossible_title">Confirm</string>
+    <string name="message_active_preset_deletion_impossible_text">Deleting an active preset is not possible.</string>
+    <string name="message_confirm_kill_switch_title">Confirm</string>
+    <string name="message_confirm_kill_switch_text">Activating the kill switch will disable the roaming protection. Continue?</string>
+
+    <string name="country_hint">Country</string>
     <string name="country_add">Add</string>
     <string name="country_remove">Remove</string>
-    <string name="changes_commit">Commit Changes</string>
+    <string name="country_clear">Clear</string>
+    <string name="changes_commit">Save Changes</string>
     <string name="changes_discard">Discard Changes</string>
 
     <string name="preset_eea">European Economics Area</string>
@@ -25,6 +40,7 @@
     <string name="preset_na">North America</string>
 
     <string name="toast_preset_activated">Preset active</string>
+    <string name="toast_preset_deactivated">Preset deactivated</string>
     <string name="toast_no_active_preset">No active config</string>
     <string name="toast_no_country_selected">No country selected</string>
     <string name="toast_changes_saved">Changes saved</string>

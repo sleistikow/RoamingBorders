@@ -85,6 +85,9 @@ public final class MobileTrafficMonitor {
         } else if (hasCell) {
             usingMobile = true;
 
+        //} else if (hasWifi) {
+        //    usingMobile = false;
+
         } else if (hasVpn) {
             /*
             // VPN: prüfen, ob darunter WLAN oder Mobilfunk steckt
@@ -101,9 +104,8 @@ public final class MobileTrafficMonitor {
                 }
                 usingMobile = cell && !wifi;   // nur wenn ausschließlich CELLULAR
             } else
-            */
+            //*/
             {
-
                 // API 23–28: Transportflags des VPN enthalten Unternetze
                 usingMobile = !hasWifi;        // validiertes WLAN → false, sonst true
             }

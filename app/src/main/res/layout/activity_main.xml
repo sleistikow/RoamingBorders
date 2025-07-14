@@ -48,6 +48,44 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <RadioGroup
+            android:id="@+id/rgListMode"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3" >
+
+            <RadioButton
+                android:id="@+id/rbWhitelist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mode_whitelist"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/rbBlacklist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mode_blacklist" />
+
+        </RadioGroup>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swActive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/preset_active"
+            android:textAlignment="textEnd"/>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCountries"
         android:layout_width="match_parent"
@@ -62,28 +100,29 @@
         android:gravity="center_vertical"
         android:paddingTop="8dp">
 
-        <!-- Searchable dropdown -->
         <AutoCompleteTextView
             android:id="@+id/actCountry"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:completionThreshold="1"/>
+            android:layout_weight="4"
+            android:completionThreshold="1"
+            android:hint="@string/country_hint"/>
 
-        <!-- Dynamically shows “Add” or “Remove” -->
+        <ImageButton
+            android:id="@+id/btnClear"
+            android:src="@drawable/outline_close_24"
+            android:contentDescription="@string/country_clear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"/>
+
         <Button
             android:id="@+id/btnAddRemove"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:text="@string/country_add" />
     </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/whitelistMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mode_whitelist"
-        android:layout_marginTop="8dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -92,27 +131,46 @@
         android:gravity="center_vertical"
         android:paddingTop="8dp">
 
-        <!-- Searchable dropdown -->
         <Button
             android:id="@+id/btnCommitChanges"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/changes_commit" />
 
-        <!-- Dynamically shows “Add” or “Remove” -->
         <Button
             android:id="@+id/btnDiscardChanges"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/changes_discard" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnEnableDisable"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/preset_activate"
-        android:layout_marginTop="8dp"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="0dp">
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/btnKillSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_run"
+            android:textAlignment="textEnd"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:checked="true" />
+
+        <ImageButton
+            android:id="@+id/btnInfo"
+            android:src="@drawable/outline_info_24"
+            android:contentDescription="@string/app_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>

@@ -57,7 +57,7 @@ public class MessageHelper {
     public static void showInfoBox(Context ctx) {
         new AlertDialog.Builder(ctx)
                 .setTitle(R.string.app_info)
-                .setMessage("© 2025 Simon Leistkow\nSimon.Leistikow@proton.me")
+                .setMessage("© 2025 Simon Leistkow\ndeveloper.sleistikow@proton.me")
                 .setPositiveButton(R.string.dialog_ok, null)
                 .setCancelable(true)
                 .show();

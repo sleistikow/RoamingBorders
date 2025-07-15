@@ -263,8 +263,9 @@ public class MainActivity extends AppCompatActivity {
         return CountryAssets.COUNTRIES[index];
     }
     private void refreshAddRemoveLabel() {
+        String preset = spnPreset.getSelectedItem().toString();
         String selectedCountry = getSelectedCountry();
-        btnAddRemove.setEnabled(selectedCountry != null);
+        btnAddRemove.setEnabled(selectedCountry != null && !isPredefinedPreset(preset));
 
         boolean contains = workingList.contains(getSelectedCountry());
         btnAddRemove.setText(contains ? R.string.country_remove : R.string.country_add);

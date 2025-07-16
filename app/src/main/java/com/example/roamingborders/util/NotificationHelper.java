@@ -10,6 +10,7 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.roamingborders.MainActivity;
 import com.example.roamingborders.R;
 import com.example.roamingborders.vpn.NullVpnService;
 
@@ -17,7 +18,10 @@ public class NotificationHelper {
 
     private static final String CH_VPN = "vpn";
     private static final String CH_MON = "monitor";
+    private static final String CH_PERM = "permissions";
     private static final String GROUP_FG  = "roaming_foreground";
+
+    private static final int NOTE_ID = 7; // arbitrary but unique id.
 
     public static Notification buildVpn(Context ctx) {
 
@@ -65,27 +69,59 @@ public class NotificationHelper {
                 .build();
     }
 
+    public static void showMissingPermissions(Context ctx) {
+        createChannels(ctx);
+
+        Intent ui = new Intent(ctx, MainActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pi = PendingIntent.getActivity(
+                ctx, 0, ui,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification note = new NotificationCompat.Builder(ctx, CH_PERM)
+                .setSmallIcon(R.drawable.outline_info_24)
+                .setContentTitle(ctx.getString(R.string.notification_permissions_missing_title))
+                .setContentText(ctx.getString(R.string.notification_permissions_missing_text))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)    // API <= API 25
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .setContentIntent(pi)
+                .setAutoCancel(true)
+                .build();
+
+        NotificationManager nm = ctx.getSystemService(NotificationManager.class);
+        nm.notify(NOTE_ID, note);
+    }
+
     private static void createChannels(Context ctx) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager nm = ctx.getSystemService(NotificationManager.class);
 
             if (nm.getNotificationChannel(CH_VPN) == null) {
-                NotificationChannel vpn = new NotificationChannel(
+                NotificationChannel ch = new NotificationChannel(
                         CH_VPN, "VPN",
-                        NotificationManager.IMPORTANCE_HIGH);
-                vpn.setShowBadge(false);
-                vpn.setSound(null, null);
-                vpn.enableVibration(false);
-                nm.createNotificationChannel(vpn);
+                        NotificationManager.IMPORTANCE_DEFAULT);
+                ch.setShowBadge(false);
+                ch.setSound(null, null);
+                ch.enableVibration(false);
+                nm.createNotificationChannel(ch);
             }
             if (nm.getNotificationChannel(CH_MON) == null) {
-                NotificationChannel mon = new NotificationChannel(
+                NotificationChannel ch = new NotificationChannel(
                         CH_MON, "Monitoring",
                         NotificationManager.IMPORTANCE_MIN);
-                mon.setShowBadge(false);
-                mon.setSound(null, null);
-                mon.enableVibration(false);
-                nm.createNotificationChannel(mon);
+                ch.setShowBadge(false);
+                ch.setSound(null, null);
+                ch.enableVibration(false);
+                nm.createNotificationChannel(ch);
+            }
+            if(nm.getNotificationChannel(CH_PERM) == null) {
+                NotificationChannel ch = new NotificationChannel(
+                        CH_PERM,
+                        "Permissions",
+                        NotificationManager.IMPORTANCE_HIGH);
+                ch.enableVibration(true);
+                nm.createNotificationChannel(ch);
             }
         }
     }

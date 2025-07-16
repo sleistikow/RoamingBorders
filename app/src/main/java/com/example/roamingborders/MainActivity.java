@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.VpnService;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -18,29 +17,27 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ShareActionProvider;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roamingborders.data.ListManager;
 import com.example.roamingborders.databinding.ActivityMainBinding;
 import com.example.roamingborders.model.ListConfig;
-import com.example.roamingborders.monitor.MobileTrafficMonitor;
 import com.example.roamingborders.preset.PresetLists;
 import com.example.roamingborders.service.CellMonitorService;
 import com.example.roamingborders.util.CountryAdapter;
 import com.example.roamingborders.util.CountryAssets;
 import com.example.roamingborders.util.MessageHelper;
+import com.example.roamingborders.util.PermissionHelper;
 import com.example.roamingborders.util.TextInputDialog;
-import com.example.roamingborders.vpn.NullVpnService;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import java.util.ArrayList;
@@ -67,17 +64,16 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnInfo;
 
     private CountryAdapter countryAdapter;
-    private ActivityResultLauncher<Intent> vpnConsent;
 
     private final ArrayList<String> workingList = new ArrayList<>();
     private ListManager listManager;
-    private MobileTrafficMonitor monitor;
-
     private Boolean blockCallback = false;
 
     private static final String PREFERENCES  = "app_preferences";
     private static final String KEY_FIRST_START = "first_start";
+    private static final String KEY_PRESETS_POPULATED = "presets_populated";
     private static final String KEY_KILL_SWITCH_ACTIVE = "kill_switch_active";
+    private static final int REQUESTED_PERMISSIONS = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,22 +99,13 @@ public class MainActivity extends AppCompatActivity {
         btnKillSwitch    = binding.btnKillSwitch;
         btnInfo          = binding.btnInfo;
 
+        listManager = new ListManager(this);
+
         rgListMode.check(rbWhitelist.getId());
         rbWhitelist.setEnabled(false);
         rbBlacklist.setEnabled(false);
         btnCommitChanges.setEnabled(false);
         btnDiscardChanges.setEnabled(false);
-
-        vpnConsent = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        btnKillSwitch.setChecked(false);
-                        btnKillSwitch.setEnabled(true);
-                    }
-                }
-        );
-
-        listManager = new ListManager(this);
 
         swActive.setOnCheckedChangeListener((v, checked) -> {
             if (!blockCallback) {
@@ -133,11 +120,17 @@ public class MainActivity extends AppCompatActivity {
         btnCommitChanges.setOnClickListener(v -> commitWorkingList());
         btnDiscardChanges.setOnClickListener(v -> discardWorkingList());
 
-        Context ctx = this;
+        // Note: the kill switch is disabled and checked, by default!
+        // The following call is not strictly necessary, however it prevents
+        // the toggle animation to play when the app is opened and the kill
+        // switch was deactivated by the user before.
+        btnKillSwitch.setChecked(isKillSwitchActive());
         btnKillSwitch.setOnCheckedChangeListener((v, checked) -> {
             if(checked) {
-                MessageHelper.showKillSwitchConfirmation(ctx, (i, id) ->
-                        killSwitchChanged(true)
+                MessageHelper.showKillSwitchConfirmation(this,
+                        () -> killSwitchChanged(true), // Yes
+                        () -> btnKillSwitch.setChecked(false) // No/Abort/Dismiss
+
                 );
             } else {
                 killSwitchChanged(false);
@@ -149,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
                         CountryAssets.getDisplayList());
         actCountry.setAdapter(countryAdapterAuto);
+        actCountry.setOnFocusChangeListener((v, focus) -> { if(focus) actCountry.showDropDown(); });
         actCountry.setOnClickListener(v -> actCountry.showDropDown());
         actCountry.setOnItemClickListener((p,v,i,id) -> refreshAddRemoveLabel());
 
@@ -169,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an initial list if app is started for the first time.
         populatePresets();
+        refreshAddRemoveLabel();
         spnPreset.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 blockCallback = true;
@@ -178,23 +173,9 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        monitor = new MobileTrafficMonitor(this, usingMobile -> {
-            if(isKillSwitchActive())
-                return;
-            if (usingMobile) {
-                CellMonitorService.ensureRunning(ctx);
-            } else {
-                CellMonitorService.ensureStopped(ctx);
-            }
-        });
-
-        refreshAddRemoveLabel();
-        requestRuntimePermissions();
-        updateServices();
+        // Finally, check requirements.
+        checkRequirements();
     }
-
-    @Override protected void onStart() { super.onStart(); monitor.start(); }
-    @Override protected void onStop()  { super.onStop();  monitor.stop();  }
 
     private void refreshPresetSpinner() {
         ArrayAdapter<String> a = new ArrayAdapter<>(this,
@@ -221,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         btnDiscardChanges.setEnabled(false);
 
         // Force update.
-        CellMonitorService.ensureRunning(this);
+        updateServices();
 
         // Info.
         Toast.makeText(this, R.string.toast_changes_saved, Toast.LENGTH_SHORT).show();
@@ -298,7 +279,9 @@ public class MainActivity extends AppCompatActivity {
         // Currently, we only allow enabling.
         swActive.setEnabled(!active);
 
-        CellMonitorService.ensureRunning(this);
+        // Force update.
+        updateServices();
+
         Toast.makeText(this, active ? R.string.toast_preset_activated : R.string.toast_preset_deactivated, Toast.LENGTH_SHORT).show();
     }
 
@@ -318,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(isActivePreset(selectedPreset)) {
             MessageHelper.showActivePresetDeletionNotPossible(this);
         } else {
-            MessageHelper.showDeletePreset(this, (v, id) ->
+            MessageHelper.showDeletePreset(this, () ->
             {
                 listManager.deleteList(selectedPreset);
                 refreshPresetSpinner();
@@ -335,38 +318,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void requestRuntimePermissions() {
-        List<String> req = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                        != PackageManager.PERMISSION_GRANTED) {
-            req.add(Manifest.permission.POST_NOTIFICATIONS);
-        }
-        if (!req.isEmpty()) {
-            ActivityCompat.requestPermissions(this,
-                    req.toArray(new String[0]), 42);
-        }
-
-        Intent prepareIntent = VpnService.prepare(this);
-        if (prepareIntent != null) {
-            MessageHelper.showVpnInfo(this, (d, i) -> vpnConsent.launch(prepareIntent));
-        } else {
-            btnKillSwitch.setChecked(isKillSwitchActive());
-            btnKillSwitch.setEnabled(true);
-        }
-    }
-
-    private void updateServices() {
-        if(isKillSwitchActive()) {
-            CellMonitorService.ensureStopped(this);
-        } else {
-            CellMonitorService.ensureRunning(this);
-        }
-    }
-
     private void populatePresets() {
         SharedPreferences preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-        if(preferences.contains(KEY_FIRST_START)) {
+        if(preferences.contains(KEY_PRESETS_POPULATED)) {
             refreshPresetSpinner();
 
             String activePreset = listManager.getActiveConfig();
@@ -400,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
         spnPreset.setSelection(((ArrayAdapter<String>) spnPreset.getAdapter()).getPosition(initialPreset));
 
         // Indicate population done.
-        preferences.edit().putBoolean(KEY_FIRST_START, false).apply();
+        preferences.edit().putBoolean(KEY_PRESETS_POPULATED, true).apply();
     }
 
     private boolean isPredefinedPreset(String name) {
@@ -412,8 +366,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isKillSwitchActive() {
-        return getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-                .getBoolean(KEY_KILL_SWITCH_ACTIVE, true);
+        return isKillSwitchActive(this);
     }
     public static boolean isKillSwitchActive(Context ctx) {
         return ctx.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
@@ -426,63 +379,84 @@ public class MainActivity extends AppCompatActivity {
         updateServices();
     }
 
+    private void updateServices() {
+        if(isKillSwitchActive()) {
+            CellMonitorService.ensureStopped(this);
+        } else {
+            CellMonitorService.ensureRunning(this);
+        }
+    }
+
     private void showInfo() {
         MessageHelper.showInfoBox(this);
     }
 
-    /*
-    private boolean isFirstRun() {
-        return !getSharedPreferences(PREFS, MODE_PRIVATE)
-                .getBoolean(KEY_TUTORIAL_SHOWN, false);
+    public static boolean isFirstStart(Context ctx) {
+        return ctx.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+                .getBoolean(KEY_FIRST_START, true);
     }
 
-    private void setTutorialShown() {
-        getSharedPreferences(PREFS, MODE_PRIVATE)
-                .edit().putBoolean(KEY_TUTORIAL_SHOWN, true).apply();
+    private void noteFirstStart() {
+        getSharedPreferences(PREFERENCES, MODE_PRIVATE).edit().putBoolean(KEY_FIRST_START, false).apply();
     }
 
-    private void showTour() {
-        TapTargetSequence sequence = new TapTargetSequence(this)
-                .targets(
-                        TapTarget.forView(findViewById(R.id.spnPreset),
-                                        "Presets",
-                                        "Select a predefined or custom preset here"),
-                        TapTarget.forView(findViewById(R.id.btnCopyPreset),
-                                        "Presets",
-                                        "You can copy.."),
-                        TapTarget.forView(findViewById(R.id.btnDeletePreset),
-                                        "Presets",
-                                        "..or delete the current preset"),
-                        TapTarget.forView(findViewById(R.id.btnNewPreset),
-                                        "Presets",
-                                        "And create a new one."),
-                        TapTarget.forView(findViewById(R.id.actCountry),
-                                        "Search for a country here",
-                                        "Tap and/or type here to search for a country"),
-                        TapTarget.forView(findViewById(R.id.btnAddRemove),
-                                        "Countries",
-                                        "Add or remove it here")
-                                .id(1),
-                        TapTarget.forView(findViewById(R.id.recyclerCountries),
-                                        "Countries",
-                                        "See your current preset"),
-                        TapTarget.forView(findViewById(R.id.btnCommitChanges),
-                                "Countries",
-                                "You can commit your changes to the current preset"),
-                        TapTarget.forView(findViewById(R.id.btnDiscardChanges),
-                                "Countries",
-                                "Or discard all changes whatsoever"),
-                        TapTarget.forView(findViewById(R.id.btnEnableDisable),
-                                "Activate",
-                                "Finally, activate the preset and enjoy roaming borders!")
-                )
-                .listener(new TapTargetSequence.Listener() {
-                    @Override public void onSequenceFinish() { setTutorialShown(); }
-                    @Override public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {}
-                    @Override public void onSequenceCanceled(TapTarget lastTarget) { setTutorialShown(); }
-                });
-
-        sequence.start();
-    }
+    /**
+     * The chain of requests / callbacks is:
+     * checkRequirements() -> requestRuntimePermissions() -> onRequestPermissionsResult() -> makeAppUsable()
      */
+    private void checkRequirements() {
+        Intent prepareIntent = VpnService.prepare(this);
+        if (prepareIntent != null) {
+            ActivityResultLauncher<Intent> vpnConsent = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(), result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            requestRuntimePermissions();
+                        }
+                    }
+            );
+            MessageHelper.showVpnInfo(this, () -> vpnConsent.launch(prepareIntent));
+        } else {
+            requestRuntimePermissions();
+        }
+    }
+
+    private void requestRuntimePermissions() {
+        List<String> req = PermissionHelper.getMissingPermissions(this, false);
+        if(!req.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    req.toArray(new String[0]), REQUESTED_PERMISSIONS);
+        }
+        else {
+            makeAppUsable();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int code, @NonNull String[] perms,
+                                           @NonNull int[] results) {
+        super.onRequestPermissionsResult(code, perms, results);
+        if (code != REQUESTED_PERMISSIONS) return;
+
+        makeAppUsable();
+    }
+
+    private void makeAppUsable() {
+        if(!PermissionHelper.mandatoryPermissionsGranted(this)) {
+            btnKillSwitch.setEnabled(false);
+            btnKillSwitch.setChecked(true);
+        }
+        else {
+            btnKillSwitch.setEnabled(true);
+            if (isFirstStart(this)) {
+                btnKillSwitch.setChecked(false);
+                noteFirstStart();
+            } else {
+                btnKillSwitch.setChecked(isKillSwitchActive());
+            }
+
+            // Force an update.
+            updateServices();
+        }
+    }
+
 }

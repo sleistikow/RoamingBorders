@@ -85,8 +85,8 @@ public final class MobileTrafficMonitor {
         } else if (hasCell) {
             usingMobile = true;
 
-        //} else if (hasWifi) {
-        //    usingMobile = false;
+        } else if (hasWifi) {
+            usingMobile = false;
 
         } else if (hasVpn) {
             /*

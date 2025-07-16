@@ -54,6 +54,9 @@
     <string name="notification_vpn_text">Mobile data is being blocked</string>
     <string name="notification_vpn_action_stop">Stop</string>
 
+    <string name="notification_permissions_missing_title">Action required</string>
+    <string name="notification_permissions_missing_text">Permissions are missing. Open the app and grant required permissions.</string>
+
     <string name="disclaimer_vpn_title">Disclaimer</string>
-    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) routing all network request into the void to block all data traffic. The following system dialogue asks for permission to set up the VPN network.</string>
+    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) discarding all network request in order to block data traffic. The following system dialogue asks for permission to set up the VPN network.</string>
 </resources>

@@ -7,20 +7,25 @@ import android.content.DialogInterface;
 import com.example.roamingborders.R;
 
 public class MessageHelper {
-    public static void showVpnInfo(Context ctx, DialogInterface.OnClickListener listener) {
+
+    public interface Listener {
+        void onActionTriggered();
+    }
+
+    public static void showVpnInfo(Context ctx, Listener listener) {
         new AlertDialog.Builder(ctx)
                 .setTitle(R.string.disclaimer_vpn_title)
                 .setMessage(R.string.disclaimer_vpn_text)
-                .setPositiveButton(R.string.dialog_ok, listener)
+                .setPositiveButton(R.string.dialog_ok, (d, i) -> listener.onActionTriggered())
                 .setCancelable(false)
                 .show();
     }
 
-    public static void showDeletePreset(Context ctx, DialogInterface.OnClickListener listener) {
+    public static void showDeletePreset(Context ctx, Listener listener) {
         new AlertDialog.Builder(ctx)
                 .setTitle(R.string.message_preset_deletion_title)
                 .setMessage(R.string.message_preset_deletion_text)
-                .setPositiveButton(R.string.dialog_yes, listener)
+                .setPositiveButton(R.string.dialog_yes, (d, i) -> listener.onActionTriggered())
                 .setNegativeButton(R.string.dialog_no, null)
                 .setCancelable(true)
                 .show();
@@ -44,13 +49,14 @@ public class MessageHelper {
                 .show();
     }
 
-    public static void showKillSwitchConfirmation(Context ctx, DialogInterface.OnClickListener listener) {
+    public static void showKillSwitchConfirmation(Context ctx, Listener positiveListener, Listener negativeListener) {
         new AlertDialog.Builder(ctx)
                 .setTitle(R.string.message_confirm_kill_switch_title)
                 .setMessage(R.string.message_confirm_kill_switch_text)
-                .setPositiveButton(R.string.dialog_yes, listener)
-                .setNegativeButton(R.string.dialog_no, null)
+                .setPositiveButton(R.string.dialog_yes, (d, i) -> positiveListener.onActionTriggered())
+                .setNegativeButton(R.string.dialog_no, (d, i) -> negativeListener.onActionTriggered())
                 .setCancelable(true)
+                .setOnCancelListener(d -> negativeListener.onActionTriggered())
                 .show();
     }
 

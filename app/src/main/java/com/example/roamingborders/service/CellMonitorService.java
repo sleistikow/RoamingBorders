@@ -17,9 +17,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.example.roamingborders.MainActivity;
 import com.example.roamingborders.R;
 import com.example.roamingborders.data.ListManager;
 import com.example.roamingborders.model.ListConfig;
+import com.example.roamingborders.monitor.MobileTrafficMonitor;
 import com.example.roamingborders.util.NotificationHelper;
 import com.example.roamingborders.vpn.NullVpnService;
 
@@ -32,6 +34,8 @@ public class CellMonitorService extends Service {
     private ListManager listManager;
 
     private Object serviceStateListener;
+    private MobileTrafficMonitor mobileTrafficMonitor;
+    private boolean usingMobileTraffic = false;
 
     private static CellMonitorService instance;
 
@@ -72,6 +76,11 @@ public class CellMonitorService extends Service {
             }
             serviceStateListener = null;
         }
+        if(mobileTrafficMonitor != null) {
+            mobileTrafficMonitor.stop();
+            mobileTrafficMonitor = null;
+        }
+
         instance = null;
     }
 
@@ -126,15 +135,21 @@ public class CellMonitorService extends Service {
             serviceStateListener = phoneListener;
         }
 
-        evaluate();
+        mobileTrafficMonitor = new MobileTrafficMonitor(this, usingMobile -> {
+            if(usingMobile != usingMobileTraffic) {
+                usingMobileTraffic = usingMobile;
+                evaluate();
+            }
+        });
+        mobileTrafficMonitor.start();
+
         return START_STICKY;
     }
 
     private void evaluate() {
         String iso = tm.getNetworkCountryIso().toUpperCase(Locale.US);
         if(iso.isEmpty()) {
-            // This should not happen since the MobileTrafficMonitor should have killed
-            // the service.
+            // This is the case of SIM ejection.
             return;
         }
 
@@ -145,7 +160,7 @@ public class CellMonitorService extends Service {
         }
 
         boolean blocked = cfg.isBlocked(iso);
-        if (blocked) NullVpnService.ensureRunning(this);
+        if (blocked && usingMobileTraffic) NullVpnService.ensureRunning(this);
         else NullVpnService.ensureStopped(this);
     }
 

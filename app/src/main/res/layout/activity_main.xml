@@ -106,7 +106,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:completionThreshold="1"
-            android:hint="@string/country_hint"/>
+            android:hint="@string/country_hint"
+            android:singleLine="true"/>
 
         <ImageButton
             android:id="@+id/btnClear"

@@ -56,6 +56,14 @@ public class CellMonitorService extends Service {
         }
     }
 
+    public static boolean isCurrentlyBlocking() {
+        return NullVpnService.isRunning();
+    }
+
+    public static String getCurrentCountry() {
+        if(instance == null || instance.tm == null) return "";
+        return instance.tm.getNetworkCountryIso().toUpperCase(Locale.US);
+    }
 
     @Override
     public void onCreate() {
@@ -147,7 +155,7 @@ public class CellMonitorService extends Service {
     }
 
     private void evaluate() {
-        String iso = tm.getNetworkCountryIso().toUpperCase(Locale.US);
+        String iso = getCurrentCountry();
         if(iso.isEmpty()) {
             // This is the case of SIM ejection.
             return;

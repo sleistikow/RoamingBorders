@@ -9,7 +9,10 @@ import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -25,6 +28,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -78,8 +85,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         // ---------- VIEW BINDINGS ----------
         spnPreset        = binding.spnPreset;
@@ -142,7 +158,10 @@ public class MainActivity extends AppCompatActivity {
                 new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
                         CountryAssets.getDisplayList());
         actCountry.setAdapter(countryAdapterAuto);
-        actCountry.setOnFocusChangeListener((v, focus) -> { if(focus) actCountry.showDropDown(); });
+        actCountry.setOnFocusChangeListener((v, focus) -> {
+            if(focus) actCountry.showDropDown();
+            else hideKeyboard(v);
+        });
         actCountry.setOnClickListener(v -> actCountry.showDropDown());
         actCountry.setOnItemClickListener((p,v,i,id) -> refreshAddRemoveLabel());
 
@@ -175,6 +194,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Finally, check requirements.
         checkRequirements();
+    }
+
+    private void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     private void refreshPresetSpinner() {
@@ -270,7 +294,23 @@ public class MainActivity extends AppCompatActivity {
     private void updatePresetStatus(boolean active) {
         if (active) {
             String preset = spnPreset.getSelectedItem().toString();
-            listManager.setActiveConfig(preset);
+            if(CellMonitorService.isCurrentlyBlocking() ) {
+                ListConfig cfg = listManager.loadList(preset);
+                if(cfg.isBlocked(CellMonitorService.getCurrentCountry()))
+                {
+                    MessageHelper.showSwitchFromRunningPreset(this,
+                            () -> listManager.setActiveConfig(preset),
+                            () -> {
+                                blockCallback = true;
+                                swActive.setChecked(false);
+                                blockCallback = false;
+                            }
+                    );
+                }
+            }
+            else {
+                listManager.setActiveConfig(preset);
+            }
         } else {
             // This branch should not be possible in the current ui-design (see below).
             listManager.setActiveConfig(null);

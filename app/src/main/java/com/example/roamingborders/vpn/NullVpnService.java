@@ -38,6 +38,10 @@ public class NullVpnService extends VpnService {
         }
     }
 
+    public static boolean isRunning() {
+        return instance != null && instance.tun != null;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

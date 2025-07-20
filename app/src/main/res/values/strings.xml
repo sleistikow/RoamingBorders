@@ -6,7 +6,7 @@
     <string name="mode_blacklist">Blacklist</string>
     <string name="mode_whitelist">Whitelist</string>
 
-    <string name="preset_active">Active</string>
+    <string name="preset_active">Activate</string>
     <string name="preset_init">My Preset</string>
     <string name="preset_copy">Copy preset</string>
     <string name="preset_delete">Delete preset</string>

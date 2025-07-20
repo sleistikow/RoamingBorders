@@ -54,35 +54,21 @@
         android:orientation="horizontal"
         android:gravity="center" >
 
-        <RadioGroup
-            android:id="@+id/rgListMode"
-            android:orientation="horizontal"
+        <TextView
+            android:id="@+id/listMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3" >
+            android:layout_weight="5"
+            android:layout_gravity="center"
+            android:textAlignment="center"/>
 
-            <RadioButton
-                android:id="@+id/rbWhitelist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mode_whitelist"
-                android:checked="true"/>
-
-            <RadioButton
-                android:id="@+id/rbBlacklist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mode_blacklist" />
-
-        </RadioGroup>
-
-        <com.google.android.material.materialswitch.MaterialSwitch
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/swActive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/preset_active"
-            android:textAlignment="textEnd"/>
+            android:textAlignment="center"/>
 
     </LinearLayout>
 

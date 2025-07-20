@@ -1,26 +1,21 @@
 package com.example.roamingborders;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -59,13 +54,12 @@ public class MainActivity extends AppCompatActivity {
     private AutoCompleteTextView actCountry;
     private ImageButton btnClear;
     private Button btnAddRemove;
-    private MaterialSwitch swActive;
+    private Button swActive;
     private ImageButton btnCopyPreset, btnDeletePreset, btnNewPreset;
     private Button btnCommitChanges, btnDiscardChanges;
 
     private RecyclerView recyclerCountries;
-    private RadioGroup rgListMode;
-    private RadioButton rbWhitelist, rbBlacklist;
+    private TextView listMode;
 
     private MaterialSwitch btnKillSwitch;
     private ImageButton btnInfo;
@@ -73,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private CountryAdapter countryAdapter;
 
     private final ArrayList<String> workingList = new ArrayList<>();
+    private Boolean workingListMode = null;
     private ListManager listManager;
-    private Boolean blockCallback = false;
 
     private static final String PREFERENCES  = "app_preferences";
     private static final String KEY_FIRST_START = "first_start";
@@ -106,9 +100,7 @@ public class MainActivity extends AppCompatActivity {
         btnCopyPreset    = binding.btnCopyPreset;
         btnDeletePreset  = binding.btnDeletePreset;
         btnNewPreset     = binding.btnNewPreset;
-        rgListMode       = binding.rgListMode;
-        rbWhitelist      = binding.rbWhitelist;
-        rbBlacklist      = binding.rbBlacklist;
+        listMode         = binding.listMode;
         recyclerCountries= binding.recyclerCountries;
         btnCommitChanges = binding.btnCommitChanges;
         btnDiscardChanges= binding.btnDiscardChanges;
@@ -117,17 +109,10 @@ public class MainActivity extends AppCompatActivity {
 
         listManager = new ListManager(this);
 
-        rgListMode.check(rbWhitelist.getId());
-        rbWhitelist.setEnabled(false);
-        rbBlacklist.setEnabled(false);
         btnCommitChanges.setEnabled(false);
         btnDiscardChanges.setEnabled(false);
 
-        swActive.setOnCheckedChangeListener((v, checked) -> {
-            if (!blockCallback) {
-                updatePresetStatus(checked);
-            }
-        });
+        swActive.setOnClickListener(v -> activatePreset());
 
         btnCopyPreset.setOnClickListener(v -> copyCurrentPreset());
         btnDeletePreset.setOnClickListener(v -> deleteCurrentPreset());
@@ -160,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
         actCountry.setAdapter(countryAdapterAuto);
         actCountry.setOnFocusChangeListener((v, focus) -> {
             if(focus) actCountry.showDropDown();
-            else hideKeyboard(v);
         });
+        actCountry.setOnDismissListener(() -> hideKeyboard(actCountry));
         actCountry.setOnClickListener(v -> actCountry.showDropDown());
         actCountry.setOnItemClickListener((p,v,i,id) -> refreshAddRemoveLabel());
 
@@ -185,9 +170,7 @@ public class MainActivity extends AppCompatActivity {
         refreshAddRemoveLabel();
         spnPreset.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                blockCallback = true;
                 presetSelected();
-                blockCallback = false;
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
@@ -212,14 +195,17 @@ public class MainActivity extends AppCompatActivity {
         ListConfig cfg = listManager.loadList(name);
         workingList.clear();
         workingList.addAll(cfg.iso2);
+        workingListMode = cfg.whitelist;
         countryAdapter.notifyDataSetChanged();
-        rgListMode.check(cfg.whitelist ? rbWhitelist.getId() : rbBlacklist.getId());
+        listMode.setText(getString(cfg.whitelist ? R.string.mode_whitelist : R.string.mode_blacklist));
         refreshAddRemoveLabel();
     }
 
     private void commitWorkingList() {
+        if(workingListMode == null) return; // Failsafe.
+
         String preset = spnPreset.getSelectedItem().toString();
-        listManager.saveList(preset, new HashSet<>(workingList), rbWhitelist.isChecked());
+        listManager.saveList(preset, new HashSet<>(workingList), workingListMode);
         loadPreset(preset);
 
         btnCommitChanges.setEnabled(false);
@@ -287,42 +273,32 @@ public class MainActivity extends AppCompatActivity {
 
         loadPreset(preset);
         boolean isActive = preset.equals(listManager.getActiveConfig());
-        swActive.setChecked(isActive);
         swActive.setEnabled(!isActive);
     }
 
-    private void updatePresetStatus(boolean active) {
-        if (active) {
-            String preset = spnPreset.getSelectedItem().toString();
-            if(CellMonitorService.isCurrentlyBlocking() ) {
-                ListConfig cfg = listManager.loadList(preset);
-                if(cfg.isBlocked(CellMonitorService.getCurrentCountry()))
-                {
-                    MessageHelper.showSwitchFromRunningPreset(this,
-                            () -> listManager.setActiveConfig(preset),
-                            () -> {
-                                blockCallback = true;
-                                swActive.setChecked(false);
-                                blockCallback = false;
-                            }
-                    );
-                }
-            }
-            else {
-                listManager.setActiveConfig(preset);
-            }
+    private void activatePreset() {
+        String preset = spnPreset.getSelectedItem().toString();
+
+        MessageHelper.Listener activate = () -> {
+            // Switch preset
+            listManager.setActiveConfig(preset);
+            swActive.setEnabled(false);
+            // Force update.
+            updateServices();
+
+            Toast.makeText(this, R.string.toast_preset_activated, Toast.LENGTH_SHORT).show();
+        };
+
+        ListConfig cfg = listManager.loadList(preset);
+        if(CellMonitorService.isCurrentlyBlocking() &&
+                !cfg.isBlocked(CellMonitorService.getCurrentCountry()))
+        {
+            MessageHelper.showSwitchFromRunningPreset(this,
+                    activate
+            );
         } else {
-            // This branch should not be possible in the current ui-design (see below).
-            listManager.setActiveConfig(null);
+            activate.onActionTriggered();
         }
-
-        // Currently, we only allow enabling.
-        swActive.setEnabled(!active);
-
-        // Force update.
-        updateServices();
-
-        Toast.makeText(this, active ? R.string.toast_preset_activated : R.string.toast_preset_deactivated, Toast.LENGTH_SHORT).show();
     }
 
     private void copyCurrentPreset() {

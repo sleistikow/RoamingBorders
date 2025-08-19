@@ -86,8 +86,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+
+            v.setPadding(bars.left, bars.top, bars.right, Math.max(bars.bottom, ime.bottom));
             return WindowInsetsCompat.CONSUMED;
         });
 
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         actCountry.setOnFocusChangeListener((v, focus) -> {
             if(focus) actCountry.showDropDown();
         });
-        actCountry.setOnDismissListener(() -> hideKeyboard(actCountry));
+        //actCountry.setOnDismissListener(() -> { hideKeyboard(actCountry); }); // Makes keyboard disappear too often.
         actCountry.setOnClickListener(v -> actCountry.showDropDown());
         actCountry.setOnItemClickListener((p,v,i,id) -> refreshAddRemoveLabel());
 

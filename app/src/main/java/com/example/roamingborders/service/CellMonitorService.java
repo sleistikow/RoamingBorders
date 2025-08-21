@@ -4,6 +4,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.IBinder;
@@ -30,10 +34,15 @@ import java.util.Locale;
 public class CellMonitorService extends Service {
     private static final int NOTIF_ID = 2001;
     private static final String ACTION_STOP = "STOP_MONITORING";
+
     private TelephonyManager tm;
+    private Object serviceStateListener;
+
+    //private ConnectivityManager cm;
+    //private ConnectivityManager.NetworkCallback networkCallback;
+
     private ListManager listManager;
 
-    private Object serviceStateListener;
     private MobileTrafficMonitor mobileTrafficMonitor;
     private boolean usingMobileTraffic = false;
 
@@ -68,8 +77,9 @@ public class CellMonitorService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        //cm = getSystemService(ConnectivityManager.class);
         tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        listManager = new ListManager(this);
+        listManager = new ListManager(getApplicationContext());
         instance = this;
     }
 
@@ -82,6 +92,8 @@ public class CellMonitorService extends Service {
             } else {
                 tm.listen((PhoneStateListener) serviceStateListener, PhoneStateListener.LISTEN_NONE);
             }
+            //cm.unregisterNetworkCallback(networkCallback);
+
             serviceStateListener = null;
         }
         if(mobileTrafficMonitor != null) {
@@ -96,7 +108,7 @@ public class CellMonitorService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && ACTION_STOP.equals(intent.getAction())) {
             // Stop the VPN service in case it's still running.
-            NullVpnService.ensureStopped(this);
+            NullVpnService.ensureStopped(getApplicationContext());
             stopForeground(true);
             stopSelf();
             return START_NOT_STICKY;
@@ -106,7 +118,7 @@ public class CellMonitorService extends Service {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 // API 34+: 3‑arg overload verlangt expliziten Typ → SERVICE_TYPE_DATA_SYNC
                 startForeground(NOTIF_ID,
-                        NotificationHelper.buildPersistent(this),
+                        NotificationHelper.buildPersistent(getApplicationContext()),
                         ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
             } else {
                 // Ältere APIs nutzen 2‑arg Variante (Typ kommt aus Manifest)
@@ -118,12 +130,39 @@ public class CellMonitorService extends Service {
             return START_NOT_STICKY;
         }
 
+        /*
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onCapabilitiesChanged(@NonNull Network network,
+                                              @NonNull NetworkCapabilities caps) {
+                boolean isCell = caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+                //boolean notRoaming = caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING);
+                if (isCell) {
+                    evaluate();
+                }
+            }
+
+            @Override
+            public void onLost(@NonNull Network network) {
+                NullVpnService.ensureStopped(getApplicationContext());
+            }
+        };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // API 24+
+            cm.registerDefaultNetworkCallback(networkCallback);
+        } else { // API 23
+            NetworkRequest req = new NetworkRequest.Builder()
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    .build();
+            cm.registerNetworkCallback(req, networkCallback);
+        }
+        */
+
         if (Build.VERSION.SDK_INT >= 31)
         {
             class MyTelephonyCallback extends TelephonyCallback implements TelephonyCallback.ServiceStateListener {
                 @Override
                 public void onServiceStateChanged(@NonNull ServiceState serviceState) {
-                    // Your logic here
                     evaluate();
                 }
             }
@@ -143,7 +182,7 @@ public class CellMonitorService extends Service {
             serviceStateListener = phoneListener;
         }
 
-        mobileTrafficMonitor = new MobileTrafficMonitor(this, usingMobile -> {
+        mobileTrafficMonitor = new MobileTrafficMonitor(getApplicationContext(), usingMobile -> {
             if(usingMobile != usingMobileTraffic) {
                 usingMobileTraffic = usingMobile;
                 evaluate();
@@ -163,13 +202,13 @@ public class CellMonitorService extends Service {
 
         ListConfig cfg = listManager.loadActiveConfig();
         if(cfg == null) {
-            NullVpnService.ensureStopped(this);
+            NullVpnService.ensureStopped(getApplicationContext());
             return;
         }
 
         boolean blocked = cfg.isBlocked(iso);
-        if (blocked && usingMobileTraffic) NullVpnService.ensureRunning(this);
-        else NullVpnService.ensureStopped(this);
+        if (blocked && usingMobileTraffic) NullVpnService.ensureRunning(getApplicationContext());
+        else NullVpnService.ensureStopped(getApplicationContext());
     }
 
     @Override public IBinder onBind(Intent i) { return null; }

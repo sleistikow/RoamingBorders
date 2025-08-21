@@ -51,8 +51,18 @@ public class MessageHelper {
 
     public static void showSwitchFromRunningPreset(Context ctx, Listener positiveListener) {
         new AlertDialog.Builder(ctx)
-                .setTitle(R.string.message_confirm_kill_switch_title)
-                .setMessage(R.string.message_confirm_kill_switch_text)
+                .setTitle(R.string.message_confirm_switch_active_preset_title)
+                .setMessage(R.string.message_confirm_switch_active_preset_text)
+                .setPositiveButton(R.string.dialog_yes, (d, i) -> positiveListener.onActionTriggered())
+                .setNegativeButton(R.string.dialog_no, null)
+                .setCancelable(true)
+                .show();
+    }
+
+    public static void showRemoveCurrentlyBlockedCountry(Context ctx, Listener positiveListener) {
+        new AlertDialog.Builder(ctx)
+                .setTitle(R.string.message_confirm_removing_current_country_title)
+                .setMessage(R.string.message_confirm_removing_current_country_text)
                 .setPositiveButton(R.string.dialog_yes, (d, i) -> positiveListener.onActionTriggered())
                 .setNegativeButton(R.string.dialog_no, null)
                 .setCancelable(true)

@@ -206,18 +206,30 @@ public class MainActivity extends AppCompatActivity {
     private void commitWorkingList() {
         if(workingListMode == null) return; // Failsafe.
 
-        String preset = spnPreset.getSelectedItem().toString();
-        listManager.saveList(preset, new HashSet<>(workingList), workingListMode);
-        loadPreset(preset);
+        MessageHelper.Listener commit = () -> {
+            String preset = spnPreset.getSelectedItem().toString();
+            listManager.saveList(preset, new HashSet<>(workingList), workingListMode);
+            loadPreset(preset);
 
-        btnCommitChanges.setEnabled(false);
-        btnDiscardChanges.setEnabled(false);
+            btnCommitChanges.setEnabled(false);
+            btnDiscardChanges.setEnabled(false);
 
-        // Force update.
-        updateServices();
+            // Force update.
+            updateServices();
 
-        // Info.
-        Toast.makeText(this, R.string.toast_changes_saved, Toast.LENGTH_SHORT).show();
+            // Info.
+            Toast.makeText(this, R.string.toast_changes_saved, Toast.LENGTH_SHORT).show();
+        };
+
+        if(CellMonitorService.isCurrentlyBlocking() &&
+                !workingList.contains(CellMonitorService.getCurrentCountry()))
+        {
+            MessageHelper.showRemoveCurrentlyBlockedCountry(this,
+                    commit
+            );
+        } else {
+            commit.onActionTriggered();
+        }
     }
 
     private void discardWorkingList() {

@@ -27,6 +27,8 @@
     <string name="message_active_preset_deletion_impossible_text">Deleting an active preset is not possible.</string>
     <string name="message_confirm_switch_active_preset_title">Confirm</string>
     <string name="message_confirm_switch_active_preset_text">Another preset is currently active. Changing the preset will disable the roaming protection. Continue?</string>
+    <string name="message_confirm_removing_current_country_title">Confirm</string>
+    <string name="message_confirm_removing_current_country_text">You removed the country that is currently being blocked. Proceeding will disable the roaming protection. Continue?</string>
     <string name="message_confirm_kill_switch_title">Confirm</string>
     <string name="message_confirm_kill_switch_text">Activating the kill switch will disable the roaming protection. Continue?</string>
 

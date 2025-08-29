@@ -3,34 +3,34 @@
     <string name="app_info">Info</string>
     <string name="app_run">Guard Enabled</string>
 
-    <string name="mode_blacklist">Exclude List</string>
-    <string name="mode_whitelist">Include List</string>
+    <string name="mode_blacklist">Blocked Countries</string>
+    <string name="mode_whitelist">Allowed Countries</string>
 
     <string name="preset_active">Activate</string>
-    <string name="preset_init">My Preset</string>
-    <string name="preset_copy">Copy Preset</string>
-    <string name="preset_delete">Delete Preset</string>
-    <string name="preset_new">New Preset</string>
+    <string name="preset_init">My Rule</string>
+    <string name="preset_copy">Copy Rule</string>
+    <string name="preset_delete">Delete Rule</string>
+    <string name="preset_new">New Rule</string>
 
-    <string name="name_copy">Copied Preset Name</string>
-    <string name="name_new">New Preset Name</string>
+    <string name="name_copy">Copy\'s name</string>
+    <string name="name_new">Rule\'s name</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
 
     <string name="message_preset_deletion_title">Confirm</string>
-    <string name="message_preset_deletion_text">Do you want to delete the current preset?</string>
+    <string name="message_preset_deletion_text">Do you want to delete the selected rule?</string>
     <string name="message_predefined_preset_deletion_impossible_title">Confirm</string>
-    <string name="message_predefined_preset_deletion_impossible_text">Deleting a predefined preset is not possible.</string>
+    <string name="message_predefined_preset_deletion_impossible_text">Deleting a predefined rule is not possible.</string>
     <string name="message_active_preset_deletion_impossible_title">Confirm</string>
-    <string name="message_active_preset_deletion_impossible_text">Deleting an active preset is not possible.</string>
+    <string name="message_active_preset_deletion_impossible_text">Deleting an active rule is not possible.</string>
     <string name="message_confirm_switch_active_preset_title">Confirm</string>
-    <string name="message_confirm_switch_active_preset_text">Another preset is currently active. Changing the preset will disable the roaming protection. Continue?</string>
+    <string name="message_confirm_switch_active_preset_text">Another rule is currently active. Changing the rule will disable the roaming protection. Continue?</string>
     <string name="message_confirm_removing_current_country_title">Confirm</string>
     <string name="message_confirm_removing_current_country_text">You removed the country that is currently being blocked. Proceeding will disable the roaming protection. Continue?</string>
     <string name="message_confirm_guard_state_title">Confirm</string>
-    <string name="message_confirm_guard_state_text">Deactivating the guard will disable the roaming protection. Continue?</string>
+    <string name="message_confirm_guard_state_text">This will disable the roaming protection. Continue?</string>
 
     <string name="country_hint">Country</string>
     <string name="country_add">Add</string>
@@ -43,24 +43,24 @@
     <string name="preset_eu">European Union</string>
     <string name="preset_na">North America</string>
 
-    <string name="toast_preset_activated">Preset active</string>
-    <string name="toast_preset_deactivated">Preset deactivated</string>
-    <string name="toast_no_active_preset">No active config</string>
+    <string name="toast_preset_activated">rule active</string>
+    <string name="toast_preset_deactivated">rule deactivated</string>
+    <string name="toast_no_active_preset">No active rule</string>
     <string name="toast_no_country_selected">No country selected</string>
     <string name="toast_changes_saved">Changes saved</string>
     <string name="toast_changes_discarded">Changes discarded</string>
-    <string name="toast_error_list_not_found">List not found</string>
+    <string name="toast_error_list_not_found">Rule not found</string>
 
     <string name="notification_monitoring_title">@string/app_name</string>
     <string name="notification_monitoring_text">is monitoring signal…</string>
 
-    <string name="notification_vpn_title">Blocking active</string>
-    <string name="notification_vpn_text">Mobile data is being blocked</string>
+    <string name="notification_vpn_title">Currently blocking</string>
+    <string name="notification_vpn_text">Mobile data currently being blocked</string>
     <string name="notification_vpn_action_stop">Stop</string>
 
     <string name="notification_permissions_missing_title">Action required</string>
     <string name="notification_permissions_missing_text">Permissions are missing. Open the app and grant required permissions.</string>
 
     <string name="disclaimer_vpn_title">Disclaimer</string>
-    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) discarding all network request in order to block data traffic. The following system dialogue asks for permission to set up the VPN network.</string>
+    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) in order to block network traffic, if needed. The following system dialogue asks for permission to set up the VPN network. No data is collected or send by this app. 100% protection against roaming charges cannot be guaranteed, even if used properly. By using the app, you agree to this.</string>
 </resources>

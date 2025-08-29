@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView listMode;
 
     private MaterialSwitch btnGuardState;
+    private Button btnDonate;
     private ImageButton btnInfo;
 
     private CountryAdapter countryAdapter;
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         btnCommitChanges = binding.btnCommitChanges;
         btnDiscardChanges= binding.btnDiscardChanges;
         btnGuardState    = binding.btnGuardState;
+        btnDonate        = binding.btnDonate;
         btnInfo          = binding.btnInfo;
 
         listManager = new ListManager(this);
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 guardStateChanged(false);
             }
         });
+        btnDonate.setOnClickListener(v -> showDonation());
         btnInfo.setOnClickListener(v -> showInfo());
 
         ArrayAdapter<String> countryAdapterAuto =
@@ -417,6 +420,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void showDonation() { MessageHelper.showDonationBox(this); }
     private void showInfo() {
         MessageHelper.showInfoBox(this);
     }

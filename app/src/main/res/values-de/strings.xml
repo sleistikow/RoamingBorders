@@ -51,6 +51,12 @@
     <string name="notification_vpn_action_stop">Stopp</string>
     <string name="notification_permissions_missing_title">Aktion erforderlich</string>
     <string name="notification_permissions_missing_text">Rechte sind erforderlich. Öffnen Sie die App und vergeben Sie die nötigen Rechte.</string>
+    <string name="donation_neutral">Bewerte die App</string>
+    <string name="donation_no">Vielleicht später</string>
     <string name="disclaimer_vpn_title">Haftungsausschluss</string>
     <string name="disclaimer_vpn_text">Diese App nutzt ein virtuelles privates Netzwerk (VPN) um den Datenverkehr, falls nötig, zu blockieren. Der folgende Systemdialog fragt nach der Berechtigung ein VPN aufzubauen. Diese App sammelt und versendet keinerlei Daten. Es kann kein einhundertprozentiger Schutz gegen Roaminggebühren garantiert werden, selbst bei ordnungsgemäßer Nutzung . Mit der Nutzung der App erklären Sie sich damit einverstanden.</string>
+    <string name="app_donate">spenden ❤️</string>
+    <string name="donation_title">Danke für\'s Nutzen meiner App!</string>
+    <string name="donation_text">Ich bin Solo-Entwickler und freue mich sehr, wenn dir meine App gefällt 😊 Wenn du magst, kannst du mich mit einem Kaffee unterstützen!</string>
+    <string name="donation_yes">Kauf mir einen Kaffee</string>
 </resources>

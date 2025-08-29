@@ -2,6 +2,10 @@ package com.sleistikow.roamingborders.util;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
+import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.sleistikow.roamingborders.R;
 
@@ -76,6 +80,35 @@ public class MessageHelper {
                 .setNegativeButton(R.string.dialog_no, (d, i) -> negativeListener.onActionTriggered())
                 .setCancelable(true)
                 .setOnCancelListener(d -> negativeListener.onActionTriggered())
+                .show();
+    }
+
+
+    private static void openWebPage(Context context, String url) {
+        CustomTabsIntent intent = new CustomTabsIntent.Builder()
+                .setShowTitle(true)
+                .build();
+        intent.launchUrl(context, Uri.parse(url));
+    }
+
+    private static void openRatingPage(Context ctx) {
+        String packageName = ctx.getPackageName();
+        try {
+            // First try to open Play Store app.
+            ctx.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=" + packageName)));
+        } catch (android.content.ActivityNotFoundException e) {
+            openWebPage(ctx, "https://play.google.com/store/apps/details?id=" + packageName);
+        }
+    }
+
+    public static void showDonationBox(Context ctx) {
+        new AlertDialog.Builder(ctx)
+                .setTitle(R.string.donation_title)
+                .setMessage(R.string.donation_text)
+                .setPositiveButton(R.string.donation_yes, (d, w) -> openWebPage(ctx, ctx.getString(R.string.donation_link)))
+                .setNeutralButton(R.string.donation_neutral, (d, w) -> openRatingPage(ctx))
+                .setNegativeButton(R.string.donation_no, null)
                 .show();
     }
 

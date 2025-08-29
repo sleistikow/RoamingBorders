@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.browser)
     implementation(libs.gson)
     implementation(libs.appcompat.v170)
     implementation(libs.material)

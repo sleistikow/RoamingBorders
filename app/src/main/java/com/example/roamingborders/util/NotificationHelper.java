@@ -51,13 +51,32 @@ public class NotificationHelper {
                 ctx.getString(R.string.notification_vpn_action_stop),
                 stop);
 
+        Instead, we open the main activity...
          */
+        Intent ui = new Intent(ctx, MainActivity.class)
+                .setAction(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pi = PendingIntent.getActivity(
+                ctx, 0, ui,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.setContentIntent(pi);
 
         return builder.build();
     }
 
     public static Notification buildPersistent(Context ctx) {
         createChannels(ctx);
+
+        Intent ui = new Intent(ctx, MainActivity.class)
+                .setAction(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pi = PendingIntent.getActivity(
+                ctx, 0, ui,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
         return new NotificationCompat.Builder(ctx, CH_MON)
                 .setSmallIcon(R.drawable.running_service_icon)
                 .setContentTitle(ctx.getString(R.string.notification_monitoring_title))
@@ -66,6 +85,7 @@ public class NotificationHelper {
                 .setGroup(GROUP_FG)
                 .setSortKey("B")
                 .setPriority(NotificationCompat.PRIORITY_MIN) // API <= 25
+                .setContentIntent(pi)
                 .build();
     }
 

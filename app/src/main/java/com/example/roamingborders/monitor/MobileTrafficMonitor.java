@@ -1,4 +1,4 @@
-package com.example.roamingborders.monitor;
+package com.sleistikow.roamingborders.monitor;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

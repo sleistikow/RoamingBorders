@@ -1,4 +1,4 @@
-package com.example.roamingborders.model;
+package com.sleistikow.roamingborders.model;
 
 import com.google.gson.Gson;
 

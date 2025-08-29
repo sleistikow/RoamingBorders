@@ -1,4 +1,4 @@
-package com.example.roamingborders;
+package com.sleistikow.roamingborders;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,16 +30,16 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.roamingborders.data.ListManager;
-import com.example.roamingborders.databinding.ActivityMainBinding;
-import com.example.roamingborders.model.ListConfig;
-import com.example.roamingborders.preset.PresetLists;
-import com.example.roamingborders.service.CellMonitorService;
-import com.example.roamingborders.util.CountryAdapter;
-import com.example.roamingborders.util.CountryAssets;
-import com.example.roamingborders.util.MessageHelper;
-import com.example.roamingborders.util.PermissionHelper;
-import com.example.roamingborders.util.TextInputDialog;
+import com.sleistikow.roamingborders.data.ListManager;
+import com.sleistikow.roamingborders.databinding.ActivityMainBinding;
+import com.sleistikow.roamingborders.model.ListConfig;
+import com.sleistikow.roamingborders.preset.PresetLists;
+import com.sleistikow.roamingborders.service.CellMonitorService;
+import com.sleistikow.roamingborders.util.CountryAdapter;
+import com.sleistikow.roamingborders.util.CountryAssets;
+import com.sleistikow.roamingborders.util.MessageHelper;
+import com.sleistikow.roamingborders.util.PermissionHelper;
+import com.sleistikow.roamingborders.util.TextInputDialog;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import java.util.ArrayList;

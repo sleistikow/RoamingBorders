@@ -1,4 +1,4 @@
-package com.example.roamingborders.service;
+package com.sleistikow.roamingborders.service;
 
 import android.app.Service;
 import android.content.Context;
@@ -21,13 +21,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.example.roamingborders.MainActivity;
-import com.example.roamingborders.R;
-import com.example.roamingborders.data.ListManager;
-import com.example.roamingborders.model.ListConfig;
-import com.example.roamingborders.monitor.MobileTrafficMonitor;
-import com.example.roamingborders.util.NotificationHelper;
-import com.example.roamingborders.vpn.NullVpnService;
+import com.sleistikow.roamingborders.MainActivity;
+import com.sleistikow.roamingborders.R;
+import com.sleistikow.roamingborders.data.ListManager;
+import com.sleistikow.roamingborders.model.ListConfig;
+import com.sleistikow.roamingborders.monitor.MobileTrafficMonitor;
+import com.sleistikow.roamingborders.util.NotificationHelper;
+import com.sleistikow.roamingborders.vpn.NullVpnService;
 
 import java.util.Locale;
 

@@ -1,9 +1,9 @@
-package com.example.roamingborders.data;
+package com.sleistikow.roamingborders.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.roamingborders.model.ListConfig;
+import com.sleistikow.roamingborders.model.ListConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

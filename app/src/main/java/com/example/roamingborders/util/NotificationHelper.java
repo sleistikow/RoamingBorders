@@ -1,4 +1,4 @@
-package com.example.roamingborders.util;
+package com.sleistikow.roamingborders.util;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,9 +10,9 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.roamingborders.MainActivity;
-import com.example.roamingborders.R;
-import com.example.roamingborders.vpn.NullVpnService;
+import com.sleistikow.roamingborders.MainActivity;
+import com.sleistikow.roamingborders.R;
+import com.sleistikow.roamingborders.vpn.NullVpnService;
 
 public class NotificationHelper {
 

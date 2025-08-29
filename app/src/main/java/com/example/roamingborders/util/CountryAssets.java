@@ -1,4 +1,4 @@
-package com.example.roamingborders.util;
+package com.sleistikow.roamingborders.util;
 
 import java.util.ArrayList;
 import java.util.Collections;

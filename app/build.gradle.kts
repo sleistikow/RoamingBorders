@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.roamingborders"
+    namespace = "com.sleistikow.roamingborders"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.roamingborders"
+        applicationId = "com.sleistikow.roamingborders"
         minSdk = 23
         targetSdk = 35
         versionCode = 1

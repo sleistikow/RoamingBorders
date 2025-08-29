@@ -1,4 +1,4 @@
-package com.example.roamingborders.vpn;
+package com.sleistikow.roamingborders.vpn;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import android.widget.Toast;
 import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.roamingborders.service.CellMonitorService;
-import com.example.roamingborders.util.NotificationHelper;
+import com.sleistikow.roamingborders.service.CellMonitorService;
+import com.sleistikow.roamingborders.util.NotificationHelper;
 
 import java.io.FileInputStream;
 import java.io.IOException;

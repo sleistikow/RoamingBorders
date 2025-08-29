@@ -1,4 +1,4 @@
-package com.example.roamingborders;
+package com.sleistikow.roamingborders;
 
 import org.junit.Test;
 

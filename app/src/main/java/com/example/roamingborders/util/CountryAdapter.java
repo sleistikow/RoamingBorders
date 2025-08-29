@@ -1,4 +1,4 @@
-package com.example.roamingborders.util;
+package com.sleistikow.roamingborders.util;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.roamingborders.preset.PresetLists;
+import com.sleistikow.roamingborders.preset.PresetLists;
 
 import java.util.List;
 

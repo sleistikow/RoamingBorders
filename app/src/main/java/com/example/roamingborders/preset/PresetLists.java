@@ -1,7 +1,7 @@
-package com.example.roamingborders.preset;
+package com.sleistikow.roamingborders.preset;
 
-import com.example.roamingborders.R;
-import com.example.roamingborders.model.ListConfig;
+import com.sleistikow.roamingborders.R;
+import com.sleistikow.roamingborders.model.ListConfig;
 
 import java.util.Arrays;
 import java.util.Collection;

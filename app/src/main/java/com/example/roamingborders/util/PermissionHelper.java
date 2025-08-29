@@ -1,4 +1,4 @@
-package com.example.roamingborders.util;
+package com.sleistikow.roamingborders.util;
 
 import android.Manifest;
 import android.app.Activity;

@@ -1,9 +1,9 @@
-package com.example.roamingborders.util;
+package com.sleistikow.roamingborders.util;
 
 import android.app.AlertDialog;
 import android.content.Context;
 
-import com.example.roamingborders.R;
+import com.sleistikow.roamingborders.R;
 
 public class MessageHelper {
 

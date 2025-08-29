@@ -3,17 +3,17 @@
     <string name="app_info">Info</string>
     <string name="app_run">Guard Enabled</string>
 
-    <string name="mode_blacklist">Blacklist</string>
-    <string name="mode_whitelist">Whitelist</string>
+    <string name="mode_blacklist">Exclude List</string>
+    <string name="mode_whitelist">Include List</string>
 
     <string name="preset_active">Activate</string>
     <string name="preset_init">My Preset</string>
-    <string name="preset_copy">Copy preset</string>
-    <string name="preset_delete">Delete preset</string>
-    <string name="preset_new">New preset</string>
+    <string name="preset_copy">Copy Preset</string>
+    <string name="preset_delete">Delete Preset</string>
+    <string name="preset_new">New Preset</string>
 
-    <string name="name_copy">Preset name</string>
-    <string name="name_new">Preset name</string>
+    <string name="name_copy">Copied Preset Name</string>
+    <string name="name_new">New Preset Name</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_yes">Yes</string>

@@ -1,4 +1,4 @@
-package com.example.roamingborders;
+package com.sleistikow.roamingborders;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.roamingborders", appContext.getPackageName());
+        assertEquals("com.sleistikow.roamingborders", appContext.getPackageName());
     }
 }

@@ -2,7 +2,6 @@ package com.example.roamingborders.util;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 
 import com.example.roamingborders.R;
 
@@ -69,10 +68,10 @@ public class MessageHelper {
                 .show();
     }
 
-    public static void showKillSwitchConfirmation(Context ctx, Listener positiveListener, Listener negativeListener) {
+    public static void showGuardStateConfirmation(Context ctx, Listener positiveListener, Listener negativeListener) {
         new AlertDialog.Builder(ctx)
-                .setTitle(R.string.message_confirm_kill_switch_title)
-                .setMessage(R.string.message_confirm_kill_switch_text)
+                .setTitle(R.string.message_confirm_guard_state_title)
+                .setMessage(R.string.message_confirm_guard_state_text)
                 .setPositiveButton(R.string.dialog_yes, (d, i) -> positiveListener.onActionTriggered())
                 .setNegativeButton(R.string.dialog_no, (d, i) -> negativeListener.onActionTriggered())
                 .setCancelable(true)

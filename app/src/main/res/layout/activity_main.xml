@@ -141,7 +141,7 @@
         android:paddingTop="0dp">
 
         <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/btnKillSwitch"
+            android:id="@+id/btnGuardState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_run"

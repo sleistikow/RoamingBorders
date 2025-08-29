@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerCountries;
     private TextView listMode;
 
-    private MaterialSwitch btnKillSwitch;
+    private MaterialSwitch btnGuardState;
     private ImageButton btnInfo;
 
     private CountryAdapter countryAdapter;
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFERENCES  = "app_preferences";
     private static final String KEY_FIRST_START = "first_start";
     private static final String KEY_PRESETS_POPULATED = "presets_populated";
-    private static final String KEY_KILL_SWITCH_ACTIVE = "kill_switch_active";
+    private static final String KEY_GUARD_STATE_DISABLED = "guard_state_disabled";
     private static final int REQUESTED_PERMISSIONS = 42;
 
     @Override
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerCountries= binding.recyclerCountries;
         btnCommitChanges = binding.btnCommitChanges;
         btnDiscardChanges= binding.btnDiscardChanges;
-        btnKillSwitch    = binding.btnKillSwitch;
+        btnGuardState    = binding.btnGuardState;
         btnInfo          = binding.btnInfo;
 
         listManager = new ListManager(this);
@@ -123,20 +123,20 @@ public class MainActivity extends AppCompatActivity {
         btnCommitChanges.setOnClickListener(v -> commitWorkingList());
         btnDiscardChanges.setOnClickListener(v -> discardWorkingList());
 
-        // Note: the kill switch is disabled and checked, by default!
+        // Note: the guard is enabled and checked, by default!
         // The following call is not strictly necessary, however it prevents
         // the toggle animation to play when the app is opened and the kill
         // switch was deactivated by the user before.
-        btnKillSwitch.setChecked(isKillSwitchActive());
-        btnKillSwitch.setOnCheckedChangeListener((v, checked) -> {
-            if(checked) {
-                MessageHelper.showKillSwitchConfirmation(this,
-                        () -> killSwitchChanged(true), // Yes
-                        () -> btnKillSwitch.setChecked(false) // No/Abort/Dismiss
+        btnGuardState.setChecked(!isGuardDisabled());
+        btnGuardState.setOnCheckedChangeListener((v, checked) -> {
+            if(!checked) {
+                MessageHelper.showGuardStateConfirmation(this,
+                        () -> guardStateChanged(true), // Yes
+                        () -> btnGuardState.setChecked(true) // No/Abort/Dismiss
 
                 );
             } else {
-                killSwitchChanged(false);
+                guardStateChanged(false);
             }
         });
         btnInfo.setOnClickListener(v -> showInfo());
@@ -395,22 +395,22 @@ public class MainActivity extends AppCompatActivity {
         return name.equals(listManager.getActiveConfig());
     }
 
-    private boolean isKillSwitchActive() {
-        return isKillSwitchActive(this);
+    private boolean isGuardDisabled() {
+        return isGuardDisabled(this);
     }
-    public static boolean isKillSwitchActive(Context ctx) {
+    public static boolean isGuardDisabled(Context ctx) {
         return ctx.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-                .getBoolean(KEY_KILL_SWITCH_ACTIVE, true);
+                .getBoolean(KEY_GUARD_STATE_DISABLED, true);
     }
-    private void killSwitchChanged(boolean active) {
+    private void guardStateChanged(boolean disabled) {
         getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-                .edit().putBoolean(KEY_KILL_SWITCH_ACTIVE, active).apply();
+                .edit().putBoolean(KEY_GUARD_STATE_DISABLED, disabled).apply();
 
         updateServices();
     }
 
     private void updateServices() {
-        if(isKillSwitchActive()) {
+        if(isGuardDisabled()) {
             CellMonitorService.ensureStopped(this);
         } else {
             CellMonitorService.ensureRunning(this);
@@ -472,16 +472,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeAppUsable() {
         if(!PermissionHelper.mandatoryPermissionsGranted(this)) {
-            btnKillSwitch.setEnabled(false);
-            btnKillSwitch.setChecked(true);
+            btnGuardState.setEnabled(false);
+            btnGuardState.setChecked(false);
         }
         else {
-            btnKillSwitch.setEnabled(true);
+            btnGuardState.setEnabled(true);
             if (isFirstStart(this)) {
-                btnKillSwitch.setChecked(false);
+                btnGuardState.setChecked(true);
                 noteFirstStart();
             } else {
-                btnKillSwitch.setChecked(isKillSwitchActive());
+                btnGuardState.setChecked(!isGuardDisabled());
             }
 
             // Force an update.

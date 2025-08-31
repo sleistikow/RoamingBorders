@@ -63,12 +63,12 @@
     <string name="notification_permissions_missing_text">Permissions are missing. Open the app and grant required permissions.</string>
 
     <string name="donation_title">Thank you for using my App!</string>
-    <string name="donation_text">I’m a solo developer and it makes me happy to know you enjoy my app 😊 If you’d like, you can support me with a coffee!</string>
+    <string name="donation_text">I am a solo developer and created this app in my free time. If you’d like, you can support me with a hot chocolate or simply by leaving a positive review. Thanks a lot and happy traveling, Simon :-)</string>
     <string name="donation_link" translatable="false">https://sleistikow.github.io</string>
-    <string name="donation_yes">Buy a coffee</string>
+    <string name="donation_yes">Buy a hot chocolate</string>
     <string name="donation_neutral">Rate the app</string>
     <string name="donation_no">Maybe later</string>
 
     <string name="disclaimer_vpn_title">Disclaimer</string>
-    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) in order to block network traffic, if needed. The following system dialogue asks for permission to set up the VPN network. No data is collected or send by this app. 100% protection against roaming charges cannot be guaranteed, even if used properly. By using the app, you agree to this.</string>
+    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) in order to block network traffic, if needed. The following system dialog asks for permission to set up the VPN network. No data is collected or send by this app. 100% protection against roaming charges cannot be guaranteed, even if used properly. By using the app, you agree to this.</string>
 </resources>

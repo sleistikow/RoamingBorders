@@ -52,12 +52,10 @@
             android:exported="false"
             android:directBootAware="true"
             android:foregroundServiceType="specialUse">
-
-            <!-- Sub-Type „vpn“ (ab API 34) -->
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="vpn" />
-
+                android:value="vpn"
+                tools:targetApi="34" />
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>

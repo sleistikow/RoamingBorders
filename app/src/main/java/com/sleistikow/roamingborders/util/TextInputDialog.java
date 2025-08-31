@@ -7,7 +7,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -17,7 +16,6 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.sleistikow.roamingborders.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Collection;
 

@@ -7,8 +7,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sleistikow.roamingborders.preset.PresetLists;
-
 import java.util.List;
 
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.VH> {

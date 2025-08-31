@@ -1,15 +1,10 @@
 package com.sleistikow.roamingborders.preset;
 
 import com.sleistikow.roamingborders.R;
-import com.sleistikow.roamingborders.model.ListConfig;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 public class PresetLists {

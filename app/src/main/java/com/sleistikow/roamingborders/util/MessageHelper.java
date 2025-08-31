@@ -84,11 +84,19 @@ public class MessageHelper {
     }
 
 
-    private static void openWebPage(Context context, String url) {
-        CustomTabsIntent intent = new CustomTabsIntent.Builder()
-                .setShowTitle(true)
-                .build();
-        intent.launchUrl(context, Uri.parse(url));
+    private static void openWebPage(Context ctx, String url) {
+        Uri uri = Uri.parse(url);
+        try {
+            CustomTabsIntent intent = new CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .build();
+            intent.launchUrl(ctx, uri);
+        } catch(Exception e) {
+            ctx.startActivity(
+                    new Intent(Intent.ACTION_VIEW, uri)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            );
+        }
     }
 
     private static void openRatingPage(Context ctx) {

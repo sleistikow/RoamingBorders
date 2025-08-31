@@ -4,18 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.net.VpnService;
-import android.os.Build;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
 
-import com.sleistikow.roamingborders.service.CellMonitorService;
 import com.sleistikow.roamingborders.util.NotificationHelper;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 public class NullVpnService extends VpnService {

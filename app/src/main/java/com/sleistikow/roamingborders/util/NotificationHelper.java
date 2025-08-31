@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.sleistikow.roamingborders.MainActivity;
 import com.sleistikow.roamingborders.R;
-import com.sleistikow.roamingborders.vpn.NullVpnService;
 
 public class NotificationHelper {
 

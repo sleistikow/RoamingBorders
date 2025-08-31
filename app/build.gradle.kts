@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId = "com.sleistikow.roamingborders"
         minSdk = 23
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 

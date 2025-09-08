@@ -124,7 +124,7 @@ public class MessageHelper {
         new AlertDialog.Builder(ctx)
                 .setTitle(R.string.app_info)
                 .setMessage("© 2025 Simon Leistikow\ncontact@simon-leistikow.com")
-                .setPositiveButton(R.string.dialog_ok, null)
+                .setPositiveButton(R.string.privacy_policy_open, (d, w) -> openWebPage(ctx, ctx.getString(R.string.privacy_policy_link)))
                 .setCancelable(true)
                 .show();
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.net.VpnService;
+import android.os.Build;
 import android.os.ParcelFileDescriptor;
 
 import androidx.core.app.ServiceCompat;
@@ -52,9 +53,13 @@ public class NullVpnService extends VpnService {
         }
 
         try {
-            ServiceCompat.startForeground(
-                    this, NOTIF_ID, NotificationHelper.buildVpn(this),
-                    ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                ServiceCompat.startForeground(
+                        this, NOTIF_ID, NotificationHelper.buildVpn(getApplicationContext()),
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+            } else {
+                startForeground(NOTIF_ID, NotificationHelper.buildVpn(getApplicationContext()));
+            }
 
             if (tun == null) establishVpn();
         } catch (Exception se) {

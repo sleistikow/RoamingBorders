@@ -108,13 +108,11 @@ public class CellMonitorService extends Service {
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                // API 34+: 3‑arg overload verlangt expliziten Typ → SERVICE_TYPE_DATA_SYNC
                 startForeground(NOTIF_ID,
                         NotificationHelper.buildPersistent(getApplicationContext()),
-                        ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
             } else {
-                // Ältere APIs nutzen 2‑arg Variante (Typ kommt aus Manifest)
-                startForeground(NOTIF_ID, NotificationHelper.buildPersistent(this));
+                startForeground(NOTIF_ID, NotificationHelper.buildPersistent(getApplicationContext()));
             }
         } catch (SecurityException se) {
             //Log.e("CellMonitorService", "startForeground failed", se);

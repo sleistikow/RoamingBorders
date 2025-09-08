@@ -11,9 +11,7 @@
     <!-- Keep service alive in Doze -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <!-- Specific FGS types (Android 14+) -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <!-- Specific FGS type (Android 14+) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <!-- Notifications (Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" tools:targetApi="33" />
@@ -54,7 +52,7 @@
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="vpn"
+                android:value="In order to block the data connection, a VPN is created and running, simply discarding all outgoing packages"
                 tools:targetApi="34" />
             <intent-filter>
                 <action android:name="android.net.VpnService" />
@@ -65,7 +63,11 @@
         <service
             android:name=".service.CellMonitorService"
             android:exported="false"
-            android:foregroundServiceType="location|dataSync" />
+            android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="The app is constantly monitoring if the phone connects to a new cell tower in order to obtain the country it is registered in and to block the data connection, if specified by the user."
+                tools:targetApi="34"/>
+        </service>
 
         <!-- Auto‑restart after reboot -->
         <receiver android:name=".receiver.BootReceiver" android:exported="false">

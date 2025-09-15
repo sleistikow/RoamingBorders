@@ -14,7 +14,7 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (!Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) return;
 
-        if (!MainActivity.isFirstStart(context) || !MainActivity.isGuardDisabled(context)) {
+        if (!MainActivity.isFirstStart(context) && !MainActivity.isGuardDisabled(context)) {
             if (PermissionHelper.mandatoryPermissionsGranted(context)) {
                 CellMonitorService.ensureRunning(context);
             } else {

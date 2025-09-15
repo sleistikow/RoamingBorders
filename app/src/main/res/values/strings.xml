@@ -70,7 +70,7 @@
     <string name="donation_no">Maybe later</string>
 
     <string name="disclaimer_vpn_title">Disclaimer</string>
-    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) in order to block network traffic, if needed. The following system dialog asks for permission to set up the VPN network. No data is collected or send by this app. 100% protection against roaming charges cannot be guaranteed, even if used properly. By using the app, you agree to this.</string>
+    <string name="disclaimer_vpn_text">This app uses a virtual private network (VPN) in order to block network traffic, if needed. The following system dialog asks for permission to set up the VPN network. No data is collected or send by this app. 100% protection against roaming charges cannot be guaranteed, even if used properly. Emergency calls are not affected. By using the app, you agree to this.</string>
 
     <string name="privacy_policy_open">Privacy Policy</string>
     <string name="privacy_policy_link" translatable="false">https://sites.google.com/view/roaming-borders-privacy-policy/home</string>

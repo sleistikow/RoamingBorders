@@ -1,4 +1,4 @@
-package com.sleistikow.roamingborders.util;
+package com.sleistikow.roamingborders;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,7 +14,6 @@ import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.sleistikow.roamingborders.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.Collection;

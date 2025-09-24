@@ -1,4 +1,4 @@
-package com.sleistikow.roamingborders.service;
+package com.sleistikow.roamingborders;
 
 import android.app.Service;
 import android.content.Context;
@@ -13,13 +13,6 @@ import android.telephony.TelephonyManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-
-import com.sleistikow.roamingborders.R;
-import com.sleistikow.roamingborders.data.ListManager;
-import com.sleistikow.roamingborders.model.ListConfig;
-import com.sleistikow.roamingborders.monitor.MobileTrafficMonitor;
-import com.sleistikow.roamingborders.util.NotificationHelper;
-import com.sleistikow.roamingborders.vpn.NullVpnService;
 
 import java.util.Locale;
 
@@ -190,7 +183,7 @@ public class CellMonitorService extends Service {
             return;
         }
 
-        ListConfig cfg = listManager.loadActiveConfig();
+        CountryList cfg = listManager.loadActiveConfig();
         if(cfg == null) {
             NullVpnService.ensureStopped(getApplicationContext());
             return;

@@ -1,9 +1,8 @@
-package com.sleistikow.roamingborders.data;
+package com.sleistikow.roamingborders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.sleistikow.roamingborders.model.ListConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ListManager {
-    private static final String PREFS = "lists";
+    private static final String PREFERENCES = "lists";
     private static final String KEY_ACTIVE = "#?!active_list#?!";
 
     private static final String PROPERTY_ENTRIES = "entries";
@@ -22,7 +21,7 @@ public class ListManager {
 
     private final SharedPreferences sp;
 
-    public ListManager(Context ctx) { sp = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE); }
+    public ListManager(Context ctx) { sp = ctx.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE); }
 
     public void saveList(String name, Set<String> country, boolean whitelist) {
         JsonObject obj = new JsonObject();
@@ -39,12 +38,12 @@ public class ListManager {
         return names;
     }
 
-    public ListConfig loadList(String name) {
+    public CountryList loadList(String name) {
         String json = sp.getString(name, null);
         JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
         Set<String> entries = new Gson().fromJson(obj.get(PROPERTY_ENTRIES), new TypeToken<Set<String>>(){}.getType());
         boolean whitelist = obj.get(PROPERTY_WHITELIST).getAsBoolean();
-        return new ListConfig(entries, whitelist);
+        return new CountryList(entries, whitelist);
     }
 
     public void setActiveConfig(String name) {
@@ -55,7 +54,7 @@ public class ListManager {
         return sp.getString(KEY_ACTIVE, null);
     }
 
-    public ListConfig loadActiveConfig() {
+    public CountryList loadActiveConfig() {
         String activeConfigName = getActiveConfig();
         if(activeConfigName != null) {
             return loadList(activeConfigName);

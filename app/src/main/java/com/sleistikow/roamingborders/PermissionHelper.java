@@ -1,4 +1,4 @@
-package com.sleistikow.roamingborders.util;
+package com.sleistikow.roamingborders;
 
 import android.Manifest;
 import android.content.Context;
@@ -25,7 +25,6 @@ public class PermissionHelper {
         List<String> required = new ArrayList<>();
 
         // We need this for receiving telephony callbacks.
-        // TODO: double check!
         required.add(Manifest.permission.READ_PHONE_STATE);
 
         // We need this to post notifications.

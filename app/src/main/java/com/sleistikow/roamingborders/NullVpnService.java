@@ -1,4 +1,4 @@
-package com.sleistikow.roamingborders.vpn;
+package com.sleistikow.roamingborders;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,6 @@ import android.os.ParcelFileDescriptor;
 
 import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
-
-import com.sleistikow.roamingborders.util.NotificationHelper;
 
 import java.io.IOException;
 

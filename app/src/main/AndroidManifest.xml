@@ -45,7 +45,7 @@
 
         <!-- VPN that blocks all traffic -->
         <service
-            android:name=".vpn.NullVpnService"
+            android:name=".NullVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE"
             android:exported="false"
             android:directBootAware="true"
@@ -61,7 +61,7 @@
 
         <!-- Foreground service that monitors cell changes -->
         <service
-            android:name=".service.CellMonitorService"
+            android:name=".CellMonitorService"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
@@ -70,7 +70,7 @@
         </service>
 
         <!-- Auto‑restart after reboot -->
-        <receiver android:name=".receiver.BootReceiver" android:exported="false">
+        <receiver android:name=".BootReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

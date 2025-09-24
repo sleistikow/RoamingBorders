@@ -1,4 +1,4 @@
-package com.sleistikow.roamingborders.util;
+package com.sleistikow.roamingborders;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

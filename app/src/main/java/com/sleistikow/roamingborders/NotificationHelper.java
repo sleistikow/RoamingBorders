@@ -1,4 +1,4 @@
-package com.sleistikow.roamingborders.util;
+package com.sleistikow.roamingborders;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,9 +9,6 @@ import android.content.Intent;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
-
-import com.sleistikow.roamingborders.MainActivity;
-import com.sleistikow.roamingborders.R;
 
 public class NotificationHelper {
 

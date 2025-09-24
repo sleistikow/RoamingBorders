@@ -1,15 +1,15 @@
-package com.sleistikow.roamingborders.model;
+package com.sleistikow.roamingborders;
 
 import com.google.gson.Gson;
 
 import java.util.Locale;
 import java.util.Set;
 
-public class ListConfig {
+public class CountryList {
     public final Set<String> iso2;
     public final boolean whitelist;
 
-    public ListConfig(Set<String> iso2, boolean whitelist) {
+    public CountryList(Set<String> iso2, boolean whitelist) {
         this.iso2 = iso2; this.whitelist = whitelist;
     }
 
@@ -19,5 +19,5 @@ public class ListConfig {
     }
 
     public String toJson() { return new Gson().toJson(this); }
-    public static ListConfig fromJson(String j) { return new Gson().fromJson(j, ListConfig.class); }
+    public static CountryList fromJson(String j) { return new Gson().fromJson(j, CountryList.class); }
 }

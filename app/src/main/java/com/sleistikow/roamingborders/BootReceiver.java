@@ -1,13 +1,8 @@
-package com.sleistikow.roamingborders.receiver;
+package com.sleistikow.roamingborders;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import com.sleistikow.roamingborders.MainActivity;
-import com.sleistikow.roamingborders.service.CellMonitorService;
-import com.sleistikow.roamingborders.util.NotificationHelper;
-import com.sleistikow.roamingborders.util.PermissionHelper;
 
 public class BootReceiver extends BroadcastReceiver {
     @Override

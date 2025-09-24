@@ -30,16 +30,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sleistikow.roamingborders.data.ListManager;
 import com.sleistikow.roamingborders.databinding.ActivityMainBinding;
-import com.sleistikow.roamingborders.model.ListConfig;
-import com.sleistikow.roamingborders.preset.PresetLists;
-import com.sleistikow.roamingborders.service.CellMonitorService;
-import com.sleistikow.roamingborders.util.CountryAdapter;
-import com.sleistikow.roamingborders.util.CountryAssets;
-import com.sleistikow.roamingborders.util.MessageHelper;
-import com.sleistikow.roamingborders.util.PermissionHelper;
-import com.sleistikow.roamingborders.util.TextInputDialog;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import java.util.ArrayList;
@@ -72,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private ListManager listManager;
 
     private static final String PREFERENCES  = "app_preferences";
-    private static final String KEY_FIRST_START = "first_start";
-    private static final String KEY_PRESETS_POPULATED = "presets_populated";
-    private static final String KEY_GUARD_STATE_DISABLED = "guard_state_disabled";
+    private static final String KEY_FIRST_START = "key_first_start";
+    private static final String KEY_PRESETS_POPULATED = "key_presets_populated";
+    private static final String KEY_GUARD_STATE_DISABLED = "key_guard_state_disabled";
     private static final int REQUESTED_PERMISSIONS = 42;
 
     @Override
@@ -197,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadPreset(String name) {
-        ListConfig cfg = listManager.loadList(name);
+        CountryList cfg = listManager.loadList(name);
         workingList.clear();
         workingList.addAll(cfg.iso2);
         workingListMode = cfg.whitelist;
@@ -306,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.toast_preset_activated, Toast.LENGTH_SHORT).show();
         };
 
-        ListConfig cfg = listManager.loadList(preset);
+        CountryList cfg = listManager.loadList(preset);
         if(CellMonitorService.isCurrentlyBlocking() &&
                 !cfg.isBlocked(CellMonitorService.getCurrentCountry()))
         {

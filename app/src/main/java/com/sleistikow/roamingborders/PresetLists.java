@@ -1,6 +1,4 @@
-package com.sleistikow.roamingborders.preset;
-
-import com.sleistikow.roamingborders.R;
+package com.sleistikow.roamingborders;
 
 import java.util.Collections;
 import java.util.HashSet;

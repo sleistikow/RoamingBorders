@@ -1,4 +1,4 @@
-package com.sleistikow.roamingborders.util;
+package com.sleistikow.roamingborders;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 
 import androidx.browser.customtabs.CustomTabsIntent;
-
-import com.sleistikow.roamingborders.R;
 
 public class MessageHelper {
 

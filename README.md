@@ -27,7 +27,7 @@ Manually toggling roaming is inconvenient and easy to forget.
 
 ## How it works
 
-{app_name} runs a lightweight, **on-device VPN** that filters traffic based on your current country.
+Roaming Borders runs a lightweight, **on-device VPN** that filters traffic based on your current country.
 - When your current country **is not** in your allow-list → **block** data traffic system-wide.
 - When your current country **is** allowed → **allow** traffic as normal.
 - When connected to **Wi-Fi**, the guard **pauses automatically** and **resumes** once Wi-Fi disconnects.
@@ -37,10 +37,10 @@ Manually toggling roaming is inconvenient and easy to forget.
 ## Screenshots
 
 <p>
-  <img src="resources/tutorial_1.png" alt="Tutorial 1">
-  <img src="resources/tutorial_2.png" alt="Tutorial 2">
-  <img src="resources/tutorial_3.png" alt="Tutorial 3">
-  <img src="resources/tutorial_4.png" alt="Tutorial 4">
+  <img src="resources/tutorial_1.png" alt="Tutorial 1" width="200">
+  <img src="resources/tutorial_2.png" alt="Tutorial 2" width="200">
+  <img src="resources/tutorial_3.png" alt="Tutorial 3" width="200">
+  <img src="resources/tutorial_4.png" alt="Tutorial 4" width="200">
 </p>
 
 ## Installation

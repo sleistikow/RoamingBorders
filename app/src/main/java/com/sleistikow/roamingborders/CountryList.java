@@ -1,7 +1,5 @@
 package com.sleistikow.roamingborders;
 
-import com.google.gson.Gson;
-
 import java.util.Locale;
 import java.util.Set;
 
@@ -17,7 +15,4 @@ public class CountryList {
         boolean contained = iso2.contains(currentIso.toUpperCase(Locale.US));
         return whitelist ? !contained : contained;
     }
-
-    public String toJson() { return new Gson().toJson(this); }
-    public static CountryList fromJson(String j) { return new Gson().fromJson(j, CountryList.class); }
 }

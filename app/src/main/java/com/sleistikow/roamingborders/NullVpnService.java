@@ -104,8 +104,8 @@ public class NullVpnService extends VpnService {
     }
 
     @Override
-    public void onRevoke() {   // foreign VPN took over
-        // TODO: hier muss ggf. die Activity informiert werden und der Toggle deaktiviert werden
+    public void onRevoke() { // Foreign VPN took over.
+        // TODO: Notify main activity to disable guard?
         stopVpn();
     }
 }

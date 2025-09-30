@@ -66,7 +66,8 @@
     <string name="donation_text">I am a solo developer and created this app in my free time. If you’d like, you can support me with a hot chocolate or simply by leaving a positive review. Thanks a lot and happy traveling - Simon :-)</string>
     <string name="donation_link" translatable="false">https://donate.stripe.com/6oU6oHcEpaXzab41m5bII00</string>
     <string name="donation_yes">Buy a Hot Chocolate</string>
-    <string name="donation_neutral">Rate the app</string>
+    <!--<string name="donation_neutral">Rate the app</string>--> <!-- If available on Google Play some day.. -->
+    <string name="donation_neutral">GitHub ⭐</string>
     <string name="donation_no">Maybe later</string>
 
     <string name="disclaimer_vpn_title">Disclaimer</string>
@@ -74,4 +75,6 @@
 
     <string name="privacy_policy_open">Privacy Policy</string>
     <string name="privacy_policy_link" translatable="false">https://sites.google.com/view/roaming-borders-privacy-policy/home</string>
+
+    <string name="github_link" translatable="false">https://github.com/sleistikow/RoamingBorders</string>
 </resources>

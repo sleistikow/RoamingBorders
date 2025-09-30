@@ -15,7 +15,6 @@ public class CountryAssets {
             out.add(getDisplayTextForCountry(country));
         }
 
-        //Collections.sort(out);
         return out;
     }
 

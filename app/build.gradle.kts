@@ -10,8 +10,8 @@ android {
         applicationId = "com.sleistikow.roamingborders"
         minSdk = 23
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.1.3"
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

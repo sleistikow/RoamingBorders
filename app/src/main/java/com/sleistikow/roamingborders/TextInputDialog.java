@@ -75,12 +75,6 @@ public class TextInputDialog {
                     String txt = editable.toString().trim();
                     boolean valid = !txt.isEmpty() && !takenNames.contains(txt);
                     ok.setEnabled(valid);
-                    /*
-                    TextInputLayout til = layout.findViewById(R.id.tilName);
-                    til.setError(valid ? null :
-                            (txt.isEmpty() ? ctx.getString(R.string.err_empty) :
-                                    ctx.getString(R.string.err_exists)));
-                     */
                 }
             };
             input.addTextChangedListener(watcher);

@@ -73,42 +73,15 @@ public final class MobileTrafficMonitor {
         boolean hasCell = caps != null &&
                 caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
 
-        boolean hasVpn = caps != null &&
-                caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN);
-
         boolean usingMobile;
 
         if (!validated) {
             // No internet: conservatively assume that signal is required.
             usingMobile = true;
-
         } else if (hasCell) {
             usingMobile = true;
-
         } else if (hasWifi) {
             usingMobile = false;
-
-        } else if (hasVpn) {
-            /*
-            // VPN: prüfen, ob darunter WLAN oder Mobilfunk steckt
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {          // API 29+
-                List<Network> underlying = caps.getUnderlyingNetworks();
-                boolean cell = false, wifi = false;
-                if (underlying != null) {
-                    for (Network u : underlying) {
-                        NetworkCapabilities uc = cm.getNetworkCapabilities(u);
-                        if (uc == null) continue;
-                        wifi |= uc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
-                        cell |= uc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
-                    }
-                }
-                usingMobile = cell && !wifi;   // nur wenn ausschließlich CELLULAR
-            } else
-            //*/
-            {
-                // API 23–28: Transportflags des VPN enthalten Unternetze
-                usingMobile = !hasWifi;        // validiertes WLAN → false, sonst true
-            }
         } else {
             usingMobile = false;
         }

@@ -17,7 +17,7 @@ public class NotificationHelper {
     private static final String CH_PERM = "permissions";
     private static final String GROUP_FG  = "roaming_foreground";
 
-    private static final int NOTE_ID = 7; // arbitrary but unique id.
+    private static final int NOTE_ID = 7; // Arbitrary but unique id.
 
     public static Notification buildVpn(Context ctx) {
 

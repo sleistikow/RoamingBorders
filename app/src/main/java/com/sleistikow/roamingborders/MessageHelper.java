@@ -108,12 +108,17 @@ public class MessageHelper {
         }
     }
 
+    private static void openGithubPage(Context ctx) {
+        openWebPage(ctx, ctx.getString(R.string.github_link));
+    }
+
     public static void showDonationBox(Context ctx) {
         new AlertDialog.Builder(ctx)
                 .setTitle(R.string.donation_title)
                 .setMessage(R.string.donation_text)
                 .setPositiveButton(R.string.donation_yes, (d, w) -> openWebPage(ctx, ctx.getString(R.string.donation_link)))
-                .setNeutralButton(R.string.donation_neutral, (d, w) -> openRatingPage(ctx))
+                // .setNeutralButton(R.string.donation_neutral, (d, w) -> openRatingPage(ctx)) // In case available on Google Play some day..
+                .setNeutralButton(R.string.donation_neutral, (d, w) -> openGithubPage(ctx))
                 .setNegativeButton(R.string.donation_no, null)
                 .show();
     }

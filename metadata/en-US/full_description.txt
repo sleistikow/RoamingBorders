@@ -1,0 +1,21 @@
+<p><b>Why this app?</b></p>
+<p>When you travel near country borders, your phone may automatically connect to a stronger cell tower across the border—even if you never left your country. This can quickly result in costly roaming fees.</p>
+<p>Manually toggling roaming is inconvenient and easy to forget.<br/><b>Roaming Borders</b> automates the guardrails so you don’t have to.</p>
+
+<p><b>What it does</b></p>
+<ul>
+  <li><b>Block roaming when you don’t want it:</b> Select allowed countries; if your device connects outside that list, data traffic is blocked.</li>
+  <li><b>Avoid surprise charges:</b> Prevent accidental cross-border roaming near national frontiers.</li>
+  <li><b>Simple presets or full control:</b> Choose ready-made country presets or build your own list for upcoming trips.</li>
+  <li><b>On-device only:</b> Uses Android’s <i>VpnService</i> as a local firewall. No tunneling to servers.</li>
+</ul>
+
+<p><b>How it works</b></p>
+<p>Roaming Borders runs a lightweight, on-device VPN that filters traffic based on your current country.</p>
+<ul>
+  <li>When your current country <b>is not</b> in your allow-list → <b>block</b> data traffic system-wide.</li>
+  <li>When your current country <b>is</b> allowed → <b>allow</b> traffic as normal.</li>
+  <li>When connected to <b>Wi-Fi</b>, the guard <b>pauses automatically</b> and <b>resumes</b> once Wi-Fi disconnects.</li>
+</ul>
+
+<p><b>Note on reboot:</b> After restarting your phone, the guard re-enables after a short delay. To be extra safe, enable <i>Airplane mode</i> before restarting.</p>

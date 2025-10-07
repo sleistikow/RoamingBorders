@@ -3,7 +3,7 @@
 > Stay in control of your mobile connection and avoid accidental roaming fees—automatically.
 
 <p>
-  <img src="resources/feature.png" alt="Roaming Borders teaser" width="1024">
+  <img src="metadata/en-US/images/promoGraphic.png" alt="Roaming Borders teaser" width="1024">
 </p>
 
 
@@ -37,10 +37,10 @@ Roaming Borders runs a lightweight, **on-device VPN** that filters traffic based
 ## Screenshots
 
 <p>
-  <img src="resources/tutorial_1.png" alt="Tutorial 1" width="200">
-  <img src="resources/tutorial_2.png" alt="Tutorial 2" width="200">
-  <img src="resources/tutorial_3.png" alt="Tutorial 3" width="200">
-  <img src="resources/tutorial_4.png" alt="Tutorial 4" width="200">
+  <img src="metadata/en-US/images/phoneScreenshots/1.png" alt="Tutorial 1" width="200">
+  <img src="metadata/en-US/images/phoneScreenshots/2.png" alt="Tutorial 2" width="200">
+  <img src="metadata/en-US/images/phoneScreenshots/3.png" alt="Tutorial 3" width="200">
+  <img src="metadata/en-US/images/phoneScreenshots/4.png" alt="Tutorial 4" width="200">
 </p>
 
 ## Installation

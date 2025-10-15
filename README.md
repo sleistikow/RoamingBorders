@@ -3,7 +3,7 @@
 > Stay in control of your mobile connection and avoid accidental roaming fees—automatically.
 
 <p>
-  <img src="metadata/en-US/images/promoGraphic.png" alt="Roaming Borders teaser" width="1024">
+  <img src="metadata/en-US/images/featureGraphic.png" alt="Roaming Borders teaser" width="1024">
 </p>
 
 

@@ -1,15 +1,17 @@
 # Roaming Borders
 
-> Stay in control of your mobile connection and avoid accidental roaming fees—automatically.
+Stay in control of your mobile connection and avoid accidental roaming fees—automatically.
 
 <p>
   <img src="metadata/en-US/images/featureGraphic.png" alt="Roaming Borders teaser" width="1024">
 </p>
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.svg" alt="Get it on F-Droid" height="80">](https://f-droid.org/de/packages/com.sleistikow.roamingborders/)
+
 
 ## Why this app?
 
-When you travel near country borders, your phone may automatically connect to a stronger cell tower across the border—even if you never left your country. This can quickly result in costly roaming fees.
+When you travel near country borders, your phone may automatically connect to a stronger cell tower across the border, even if you never left your country. This can result in costly roaming fees.
 
 Manually toggling roaming is inconvenient and easy to forget.  
 **Roaming Borders** automates the guardrails so you don’t have to.

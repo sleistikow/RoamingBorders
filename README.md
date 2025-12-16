@@ -62,11 +62,11 @@ Roaming Borders runs a lightweight, **on-device VPN** that filters traffic based
 
 ## Limitations
 
-While the app was successfully tested in severeal scenarios (e.g. EU SIM roaming in Egypt, Israel, Switzerland), it is technically impossible to guarantee avoiding roaming charges in all scenarios. Known limitations are summarized below.  
+While the app was successfully tested in several scenarios (e.g. EU SIM roaming in Egypt, Israel, Switzerland), it is technically impossible to guarantee avoiding roaming charges in all scenarios. Known limitations are summarized below.  
   
-- Since on Android, currently only a single VPN can be used at the same, this App does not work in conjuction with other VPN apps. The VPN that was started last will be used by the system.  
-- A few milliseconds may pass between the moment the phone was registered to a blocked country and the data is effectively blocked by the VPN which is impossible to avoid due to technical reasons. This may result in roaming fees even if data is blocked properly after.  
-- Some providers may charge a basic fee just for connecting to their cell towers. It is not possible to avoid such costs with this App.  
+- Since on Android, currently only a single VPN can be used at the same, this app does not work in conjuction with other VPN apps. The VPN that was started last will be used by the system.  
+- A few milliseconds may pass between the moment the phone was registered to a blocked country and the moment the data is effectively blocked by the VPN. This is impossible to avoid due to technical reasons and may result in small roaming fees even if it feels like the app is blocking data immediately.  
+- Some providers may charge a basic fee just for connecting to their cell towers. It is not possible to avoid such costs with this app.  
 - The VPN service does not cover the entire network stack. Hence, some system apps may still send and receive data which is impossible to avoid.
 - When using the phone running this app as mobile hotspot / teathering device, connected devices are **not** affected by this app. This is also due to the VPN service not covering the entire network stack.  
 
